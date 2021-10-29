@@ -13,5 +13,6 @@ namespace Salvo.Models
             :base(options)
         {
         }
+        public DbSet<Player> Players { get; set; }
     }
 }
