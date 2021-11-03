@@ -49,6 +49,47 @@ namespace Salvo.Models
                 context.SaveChanges();
             }
 
+            if (!context.GamePlayers.Any())
+            {
+
+
+                var GamePlayers = new GamePlayer[]
+                {
+                    new GamePlayer{Game = context.Games.Find(1L), Player = context.Players.Find(1L), JoinDate = DateTime.Now },
+                    new GamePlayer{Game = context.Games.Find(1L), Player = context.Players.Find(2L), JoinDate = DateTime.Now },
+
+                    new GamePlayer{Game = context.Games.Find(2L), Player = context.Players.Find(1L), JoinDate = DateTime.Now },
+                    new GamePlayer{Game = context.Games.Find(2L), Player = context.Players.Find(2L), JoinDate = DateTime.Now },
+
+                    new GamePlayer{Game = context.Games.Find(3L), Player = context.Players.Find(2L), JoinDate = DateTime.Now },
+                    new GamePlayer{Game = context.Games.Find(3L), Player = context.Players.Find(4L), JoinDate = DateTime.Now },
+
+                    new GamePlayer{Game = context.Games.Find(4L), Player = context.Players.Find(2L), JoinDate = DateTime.Now },
+                    new GamePlayer{Game = context.Games.Find(4L), Player = context.Players.Find(1L), JoinDate = DateTime.Now },
+
+                    new GamePlayer{Game = context.Games.Find(5L), Player = context.Players.Find(4L), JoinDate = DateTime.Now },
+                    new GamePlayer{Game = context.Games.Find(5L), Player = context.Players.Find(1L), JoinDate = DateTime.Now },
+
+                    new GamePlayer{Game = context.Games.Find(6L), Player = context.Players.Find(3L), JoinDate = DateTime.Now },
+
+
+                    new GamePlayer{Game = context.Games.Find(7L), Player = context.Players.Find(4L), JoinDate = DateTime.Now },
+
+
+                    new GamePlayer{Game = context.Games.Find(8L), Player = context.Players.Find(3L), JoinDate = DateTime.Now },
+                    new GamePlayer{Game = context.Games.Find(8L), Player = context.Players.Find(4L), JoinDate = DateTime.Now },
+                };
+
+                foreach(GamePlayer g in GamePlayers)
+                {
+                    context.GamePlayers.Add(g);
+                }
+
+                context.SaveChanges();
+            }
+
+
+
            
         }
     }
