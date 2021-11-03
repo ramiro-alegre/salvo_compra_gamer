@@ -13,5 +13,9 @@ namespace Salvo.Models
             :base(options)
         {
         }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Game> Games { get; set; }
+
+        public DbSet<GamePlayer> GamePlayers { get; set; }
     }
 }
