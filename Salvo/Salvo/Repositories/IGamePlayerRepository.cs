@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Salvo.Repositories
 {
-    public interface IGameRepository 
+    public interface IGamePlayerRepository 
     {
-        IEnumerable<Game> GetAllGames();
-        IEnumerable<Game> GetAllGamesWithPlayers();
+         GamePlayer GetGamePlayerView(long idGamePlayer);
     }
 }
