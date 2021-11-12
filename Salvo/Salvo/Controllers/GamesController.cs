@@ -31,7 +31,11 @@ namespace Salvo.Controllers
                         Id = game.Id,
                         CreationDate = game.CreationDate,
                         GamePlayers = game.GamePlayers.Select(gp => new GamePlayerDTO
-                        { Id = gp.Id, JoinDate = gp.JoinDate, Player = new PlayerDTO { Id = gp.Player.Id, Email = gp.Player.Email } }).ToList()
+                        { Id = gp.Id, JoinDate = gp.JoinDate, Player = new PlayerDTO { 
+                            Id = gp.Player.Id, Email = gp.Player.Email 
+                        },
+                        Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
+                        }).ToList()
                     }).ToList();
 
                 return Ok(games);

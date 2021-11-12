@@ -14,5 +14,12 @@ namespace Salvo.Models
         public string Password { get; set; }
 
         public ICollection<GamePlayer> GamePlayers { get; set; }
+        public ICollection<Score> Scores { get; set; }
+        public Score GetScore(Game game)
+        {
+            return Scores.FirstOrDefault(score => score.GameId == game.Id);
+        }
+
+        
     }
 }
