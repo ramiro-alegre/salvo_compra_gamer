@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Salvo.Models;
 using Salvo.Repositories;
 using System;
@@ -12,6 +13,7 @@ namespace Salvo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GamesController : ControllerBase
     {
         private IGameRepository _repository;
@@ -21,24 +23,34 @@ namespace Salvo.Controllers
         }
         // GET: api/<GamesController>
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get()
         {
             try
             {
-                var games = _repository.GetAllGamesWithPlayers()
+                GameListDTO gameList = new GameListDTO
+                {
+                    Email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest",
+                    Games = _repository.GetAllGamesWithPlayers()
                     .Select(game => new GameDTO
                     {
                         Id = game.Id,
                         CreationDate = game.CreationDate,
                         GamePlayers = game.GamePlayers.Select(gp => new GamePlayerDTO
-                        { Id = gp.Id, JoinDate = gp.JoinDate, Player = new PlayerDTO { 
-                            Id = gp.Player.Id, Email = gp.Player.Email 
-                        },
-                        Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
+                        {
+                            Id = gp.Id,
+                            JoinDate = gp.JoinDate,
+                            Player = new PlayerDTO
+                            {
+                                Id = gp.Player.Id,
+                                Email = gp.Player.Email
+                            },
+                            Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
                         }).ToList()
-                    }).ToList();
+                    }).ToList()
+            };
 
-                return Ok(games);
+                return Ok(gameList);
             } catch (Exception e)
             {
                 return StatusCode(500, e.Message);
