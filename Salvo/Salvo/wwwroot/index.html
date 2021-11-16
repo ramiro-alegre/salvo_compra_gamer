@@ -1,22 +1,23 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" href="css/salvo.css" />
-	<title>Salvo games!</title>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/salvo.css" />
+    <title>Salvo games!</title>
 </head>
+
 <body>
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light navbar-expand-md">
             <a class="navbar-brand" href="#">
-                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
-                Salvo
+                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> Salvo
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -25,10 +26,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 </ul>
+                <span id="user-name" v-if="player != 'Guest'">{{ player }} </span>
                 <form id="login-form" class="form-inline my-2 my-lg-0">
                     <input v-model:value="email" class="form-control mr-sm-2" type="email" placeholder="Email" aria-label="Email">
                     <input v-model:value="password" class="form-control mr-sm-2" type="password" placeholder="Contrase&ntilde;a" aria-label="Contraseña">
+                    <input v-model:value="name" class="form-control mr-sm-2" type="textbox" placeholder="Nombre" aria-label="Nombre">
                     <button v-on:click="login" id="login-btn" class="btn btn-outline-success my-2 my-sm-0" type="button">Login</button>
+                    <button v-on:click="signin" id="login-btn" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Registro</button>
                 </form>
                 <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
             </div>
@@ -106,4 +110,5 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="js/game.js"></script>
 </body>
+
 </html>

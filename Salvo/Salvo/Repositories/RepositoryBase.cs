@@ -55,6 +55,9 @@ namespace Salvo.Repositories
             this.RepositoryContext.Set<T>().Update(entity);
         }
 
-        
+        public void SaveChanges()
+        {
+            this.RepositoryContext.SaveChanges();
+        }
     }
 }
