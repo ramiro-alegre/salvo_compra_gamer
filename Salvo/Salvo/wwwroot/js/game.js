@@ -5,7 +5,6 @@
         scores: [],
         email: "",
         password: "",
-        name: "",
         modal: {
             tittle: "",
             message: ""
@@ -16,7 +15,32 @@
         this.getGames();
     },
     methods: {
-        getGames: function() {
+        joinGame(gId) {
+            var gpId = null;
+            axios.post('/api/games/' + gId + '/players')
+                .then(response => {
+                    gpId = response.data;
+                    window.location.href = '/game.html?gp=' + gpId;
+                })
+                .catch(error => {
+                    alert("erro al unirse al juego");
+                });
+        },
+        createGame() {
+            var gpId = null;
+            axios.post('/api/games')
+                .then(response => {
+                    gpId = response.data;
+                    window.location.href = '/game.html?gp=' + gpId;
+                })
+                .catch(error => {
+                    alert("erro al obtener los datos");
+                });
+        },
+        returnGame(gpId) {
+            window.location.href = '/game.html?gp=' + gpId;
+        },
+        getGames: function (){
             this.showLogin(false);
             axios.get('/api/games')
                 .then(response => {
@@ -30,22 +54,23 @@
                     alert("erro al obtener los datos");
                 });
         },
-        showModal: function(show) {
+        showModal: function (show) {
             if (show)
                 $("#infoModal").modal('show');
             else
                 $("#infoModal").modal('hide');
         },
-        showLogin: function(show) {
+        showLogin: function (show) {
             if (show) {
                 $("#login-form").show();
                 $("#login-form").trigger("reset");
                 this.email = "";
                 this.password = "";
-            } else
+            }
+            else
                 $("#login-form").hide();
         },
-        logout: function() {
+        logout: function () {
             axios.post('/api/auth/logout')
                 .then(result => {
                     if (result.status == 200) {
@@ -57,12 +82,10 @@
                     alert("Ocurrió un error al cerrar sesión");
                 });
         },
-        login: function(event) {
+        login: function(event){
             axios.post('/api/auth/login', {
-                    email: this.email,
-                    password: this.password,
-                    name: this.name
-                })
+                email: this.email, password: this.password
+            })
                 .then(result => {
                     if (result.status == 200) {
                         this.showLogin(false);
@@ -75,19 +98,18 @@
                         this.modal.tittle = "Falló la autenticación";
                         this.modal.message = "Email o contraseña inválido"
                         this.showModal(true);
-                    } else {
+                    }
+                    else {
                         this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
                         this.modal.message = "Ha ocurrido un error";
                         this.showModal(true);
                     }
                 });
         },
-        signin: function(event) {
+        signin: function (event) {
             axios.post('/api/players', {
-                    email: this.email,
-                    password: this.password,
-                    name: this.name
-                })
+                email: this.email, password: this.password
+            })
                 .then(result => {
                     if (result.status == 201) {
                         this.login();
@@ -99,14 +121,15 @@
                         this.modal.tittle = "Falló el registro";
                         this.modal.message = error.response.data
                         this.showModal(true);
-                    } else {
+                    }
+                    else {
                         this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
                         this.modal.message = "Ha ocurrido un error";
                         this.showModal(true);
                     }
                 });
         },
-        getScores: function(games) {
+        getScores: function (games) {
             var scores = [];
             games.forEach(game => {
                 game.gamePlayers.forEach(gp => {
@@ -126,7 +149,8 @@
                         }
                         score.total += gp.point;
                         scores.push(score);
-                    } else {
+                    }
+                    else {
                         switch (gp.point) {
                             case 1:
                                 scores[index].win++;
@@ -151,3 +175,4 @@
         }
     }
 })
+
