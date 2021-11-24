@@ -17,9 +17,11 @@ namespace Salvo.Controllers
     public class GamePlayersController : ControllerBase
     {
         private IGamePlayerRepository _repository;
-        public GamePlayersController(IGamePlayerRepository repository)
+        private IPlayerRepository _playerRepository; 
+        public GamePlayersController(IGamePlayerRepository repository, IPlayerRepository playerRepository)
         {
             _repository = repository;
+            _playerRepository = playerRepository;
         }
 
 
@@ -88,5 +90,46 @@ namespace Salvo.Controllers
             }
         }
 
+        [HttpPost("{id}/ships")]
+        public IActionResult Post(long id, [FromBody] List<ShipDTO> ships)
+        {
+            try
+            {
+                var gp =  _repository.GetGamePlayerWithId(id);
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+                if (gp == null)
+                {
+                    return StatusCode(403, "No existe el juego");
+                }
+               if(email != gp.Player.Email)
+                {
+                    return StatusCode(403, "El usuario no se encuentra en el juego");
+                }
+               if(gp.Ships.Count == 5){
+                    return StatusCode(403, "Ya se han posicionado los barcos");
+                }
+
+                foreach(ShipDTO shipdto in ships)
+                {
+                    gp.Ships.Add(new Ship
+                    {
+                        
+                        Locations = shipdto.Locations.Select(location => new ShipLocation
+                        {
+                            
+                            Location = location.Location
+                        }).ToList(),
+                        Type = shipdto.Type
+                    });
+                }
+
+                _repository.Save(gp);
+             return StatusCode(201);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
