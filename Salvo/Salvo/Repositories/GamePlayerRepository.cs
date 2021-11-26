@@ -27,11 +27,11 @@ namespace Salvo.Repositories
                                             .Include(gamePlayer => gamePlayer.Game)
                                                 .ThenInclude(game => game.GamePlayers)
                                                     .ThenInclude(gp => gp.Salvos)
-                                                    .ThenInclude(salvo => salvo.Locations)
+                                                        .ThenInclude(salvo => salvo.Locations)
                                             .Include(gamePlayer => gamePlayer.Game)
                                                 .ThenInclude(game => game.GamePlayers)
                                                     .ThenInclude(gp => gp.Ships)
-                                                    .ThenInclude(ship => ship.Locations)
+                                                        .ThenInclude(ship => ship.Locations)
                                             )
                 .Where(gamePlayer => gamePlayer.Id == idGamePlayer)
                 .OrderBy(game => game.JoinDate)
@@ -47,11 +47,15 @@ namespace Salvo.Repositories
             SaveChanges();
         }
 
-        public GamePlayer GetGamePlayerWithId(long id)
+        public GamePlayer FindById(long id)
         {
             return FindByCondition(gp => gp.Id == id)
+                    .Include(gp => gp.Game)
+                        .ThenInclude(game => game.GamePlayers)
+                            .ThenInclude(gp => gp.Salvos)
                     .Include(gp => gp.Player)
-                    .Include(gamePlayer => gamePlayer.Ships)
+                    .Include(gp => gp.Ships)
+                    .Include(gp => gp.Salvos)
                     .FirstOrDefault();
         }
     }

@@ -28,6 +28,8 @@ namespace Salvo.Models
 
             }
 
+           /* 
+             
             if (!context.Games.Any())
             {
                 var Games = new Game[]
@@ -532,8 +534,10 @@ namespace Salvo.Models
                 }
 
                 context.SaveChanges();
-            }
+            } 
 
+
+           */
         }
     }
 }
