@@ -33,7 +33,9 @@ namespace Salvo.Repositories
                                                     .ThenInclude(gp => gp.Ships)
                                                         .ThenInclude(ship => ship.Locations)
                                             )
+
                 .Where(gamePlayer => gamePlayer.Id == idGamePlayer)
+                //.AsParallel()
                 .OrderBy(game => game.JoinDate)
                 .FirstOrDefault();
         }
@@ -50,12 +52,16 @@ namespace Salvo.Repositories
         public GamePlayer FindById(long id)
         {
             return FindByCondition(gp => gp.Id == id)
+                    .Include(gamePlayer => gamePlayer.Game)
+                        .ThenInclude(game => game.GamePlayers.Where(gamePlayer => gamePlayer.Id != id))
+                            .ThenInclude(gamePlayer => gamePlayer.Ships)        
                     .Include(gp => gp.Game)
                         .ThenInclude(game => game.GamePlayers)
-                            .ThenInclude(gp => gp.Salvos)
+                            .ThenInclude(gp => gp.Ships)
                     .Include(gp => gp.Player)
                     .Include(gp => gp.Ships)
                     .Include(gp => gp.Salvos)
+                    
                     .FirstOrDefault();
         }
     }

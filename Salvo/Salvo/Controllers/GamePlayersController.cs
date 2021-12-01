@@ -4,6 +4,7 @@ using Salvo.Models;
 using Salvo.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,7 +35,7 @@ namespace Salvo.Controllers
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
 
                 var gp = _repository.GetGamePlayerView(id);
-
+                var opponent = gp.GetOpponent();
                 if (gp.Player.Email != email)
                     return Forbid();
 
@@ -76,7 +77,11 @@ namespace Salvo.Controllers
                             Id = salvoLocation.Id,
                             Location = salvoLocation.Location
                         }).ToList()
-                    })).ToList()
+                    })).ToList(),
+                    Hits = gp.GetHits(),
+                    HitsOpponent = opponent?.GetHits(),
+                    Sunks = gp.GetSunks(),
+                    SunksOpponent = opponent?.GetSunks()
                 };
 
                 return Ok(gameView);
@@ -147,6 +152,9 @@ namespace Salvo.Controllers
                     return StatusCode(403, "El usuario no se encuentra en el juego");
                 }
 
+                if(gp.Ships.Count != 5)
+                    return StatusCode(403, "The Ships arent positioned");
+
                 GamePlayer gameplayer = gp.GetOpponent();
 
                 if(gameplayer == null)
@@ -155,7 +163,7 @@ namespace Salvo.Controllers
                 }
 
                 gameplayer = _repository.FindById(gameplayer.Id);
-                if(gameplayer.Ships.Count() == 0)
+                if(gameplayer.Ships.Count() == 0 || gameplayer.Ships.Count != 5)
                 {
                     return StatusCode(403, "No posiciono los barcos el oponente");
                 }

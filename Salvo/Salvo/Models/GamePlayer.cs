@@ -17,6 +17,7 @@ namespace Salvo.Models
         public ICollection<Ship> Ships { get; set; }
         public ICollection<Salvo> Salvos { get; set; }
 
+
         public Score GetScore()
         {
             return Player.GetScore(Game);
@@ -24,8 +25,40 @@ namespace Salvo.Models
 
         public GamePlayer GetOpponent()
         {
-             return Game.GamePlayers.FirstOrDefault(gp => gp.Id != Id);                                   
+            return Game.GamePlayers.FirstOrDefault(gp => gp.Id != Id);
         }
-       
+
+        public ICollection<SalvoHitDTO> GetHits()
+        {
+            return Salvos.Select(salvo => new SalvoHitDTO
+            {
+                Turn = salvo.Turn,
+                Hits = GetOpponent()?.Ships.Select(ship => new ShipHitDTO
+                {
+                    Type= ship.Type,
+                    Hits = salvo.Locations.Where
+                    (salvolocation => ship.Locations.Any(shipLocation => shipLocation.Location == salvolocation.Location))
+                    .Select(salvoLocation => salvoLocation.Location).ToList()
+                }).ToList()
+            }).ToList();
+        }
+
+        public ICollection<String> GetSunks()
+        {
+            int lastTurn = Salvos.Count;
+            List<String> salvoLocations = 
+                GetOpponent()?.Salvos
+                .Where(salvo=> salvo.Turn <= lastTurn)
+                .SelectMany(salvo => salvo.Locations.Select(location => location.Location)).ToList();
+                
+                
+            return Ships?.Where (ship => ship.Locations.Select(shipLocation => shipLocation.Location)
+                         .All(salvoLocation => salvoLocations != null ? salvoLocations.Any(shipLocation => shipLocation == salvoLocation) : false)
+                                )
+                         .Select(ship=>ship.Type).ToList();
+        }
+
     }
+
 }
+
