@@ -36,7 +36,7 @@ namespace Salvo
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
-
+            services.AddScoped<IScoreRepository, ScoreRepository>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

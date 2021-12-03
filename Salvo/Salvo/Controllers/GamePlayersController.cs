@@ -19,10 +19,12 @@ namespace Salvo.Controllers
     {
         private IGamePlayerRepository _repository;
         private IPlayerRepository _playerRepository;
-        public GamePlayersController(IGamePlayerRepository repository, IPlayerRepository playerRepository)
+        private IScoreRepository _scoreRepository;
+        public GamePlayersController(IGamePlayerRepository repository, IPlayerRepository playerRepository, IScoreRepository scoreRepository)
         {
             _repository = repository;
             _playerRepository = playerRepository;
+            _scoreRepository = scoreRepository;
         }
 
 
@@ -81,7 +83,8 @@ namespace Salvo.Controllers
                     Hits = gp.GetHits(),
                     HitsOpponent = opponent?.GetHits(),
                     Sunks = gp.GetSunks(),
-                    SunksOpponent = opponent?.GetSunks()
+                    SunksOpponent = opponent?.GetSunks(),
+                    GameState = Enum.GetName(typeof(GameState), gp.GetGameState())
                 };
 
                 return Ok(gameView);
@@ -174,8 +177,14 @@ namespace Salvo.Controllers
                 }
                 
                 if ((gp.Salvos.Count == gameplayer.Salvos.Count) && gp.JoinDate > gameplayer.JoinDate)
-                    return StatusCode(403, "This is not your turn");
- 
+                    return StatusCode(403, "No es su turno");
+
+                GameState gameState = gp.GetGameState();
+
+                if (gameState == GameState.LOSS || gameState == GameState.WIN || gameState == GameState.TIE) {
+
+                    return StatusCode(403, "El juego termino");
+                }
                 //gp = Usuario actual autenticado
                 //gameplayer = Oponente
 
@@ -191,6 +200,70 @@ namespace Salvo.Controllers
                 });
 
                 _repository.Save(gp);
+
+                gameState = gp.GetGameState();
+
+                if(gameState == GameState.WIN)
+                {
+                    Score score = new Score
+                    {
+                        FinishDate = DateTime.Now,
+                        GameId = gp.GameId,
+                        PlayerId = gp.PlayerId,
+                        Point = 1
+                    };
+                    _scoreRepository.Save(score);
+
+                    Score scoreOpponent = new Score
+                    {
+                        FinishDate = DateTime.Now,
+                        GameId = gp.GameId,
+                        PlayerId = gameplayer.PlayerId, //gameplayer == oponente
+                        Point = 0
+                    };
+                    _scoreRepository.Save(scoreOpponent);
+                }
+                else if (gameState == GameState.LOSS)
+                {
+                    Score score = new Score
+                    {
+                        FinishDate = DateTime.Now,
+                        GameId = gp.GameId,
+                        PlayerId = gp.PlayerId,
+                        Point = 0
+                    };
+                    _scoreRepository.Save(score);
+
+                    Score scoreOpponent = new Score
+                    {
+                        FinishDate = DateTime.Now,
+                        GameId = gp.GameId,
+                        PlayerId = gameplayer.PlayerId, //gameplayer == oponente
+                        Point = 1
+                    };
+                    _scoreRepository.Save(scoreOpponent);
+                }
+                else if (gameState == GameState.TIE)
+                {
+                    Score score = new Score
+                    {
+                        FinishDate = DateTime.Now,
+                        GameId = gp.GameId,
+                        PlayerId = gp.PlayerId,
+                        Point = 0.5
+                    };
+                    _scoreRepository.Save(score);
+
+                    Score scoreOpponent = new Score
+                    {
+                        FinishDate = DateTime.Now,
+                        GameId = gp.GameId,
+                        PlayerId = gameplayer.PlayerId, //gameplayer == oponente
+                        Point = 0.5
+                    };
+                    _scoreRepository.Save(scoreOpponent);
+                }
+
                 return StatusCode(201);
             }
             catch (Exception ex)

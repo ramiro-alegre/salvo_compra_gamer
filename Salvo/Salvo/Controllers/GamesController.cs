@@ -130,5 +130,12 @@ namespace Salvo.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        /*[HttpGet ("/estadistica", Name = "GetSunkedShips")]
+        [AllowAnonymous]
+        public IActionResult GetSunkedShips()
+        {
+
+        }*/
     }
 }

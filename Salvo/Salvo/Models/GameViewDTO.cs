@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Salvo.Models
 {
+    
     public class GameViewDTO
     {
         public long Id { get; set; }
@@ -16,5 +17,6 @@ namespace Salvo.Models
         public ICollection<SalvoHitDTO> HitsOpponent { get; set; }
         public ICollection<String> Sunks { get; set; }
         public ICollection<String> SunksOpponent { get; set; }
+        public String GameState { get; set; }
     }
 }

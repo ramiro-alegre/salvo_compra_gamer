@@ -42,7 +42,7 @@ namespace Salvo.Controllers
                 Match match = regex.Match(player.Email);
                 //Sí el match es false, es porque el email no esta bien, sino se pregunta si esta el mail, la password o el nombre vacios, en ese caso,
                 //devuelve datos invalidos. En el caso de no cumplir ninguno devuelve ""
-                string mensaje = !match.Success ? "Email invalido" : String.IsNullOrEmpty(player.Email) || String.IsNullOrEmpty(player.Password) || String.IsNullOrEmpty(player.Name) ? "Datos invalidos" : "";
+                string mensaje = !match.Success ? "Email invalido" : String.IsNullOrEmpty(player.Email) || String.IsNullOrEmpty(player.Password) ? "Datos invalidos" : "";
                 
                 if (mensaje != "")
                     return StatusCode(403, mensaje);
