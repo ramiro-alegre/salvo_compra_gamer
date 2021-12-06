@@ -46,23 +46,24 @@ namespace Salvo.Models
 
         public ICollection<String> GetSunks()
         {
+            List<String> asd = new List<string>();
+            
             int lastTurn = Salvos.Count;
             List<String> salvoLocations = 
                 GetOpponent()?.Salvos
                 .Where(salvo=> salvo.Turn <= lastTurn)
                 .SelectMany(salvo => salvo.Locations.Select(location => location.Location)).ToList();
-                
-                
-            return Ships?.Where (ship => ship.Locations.Select(shipLocation => shipLocation.Location)
+
+                return Ships?.Where (ship => ship.Locations.Select(shipLocation => shipLocation.Location)
                          .All(shipLocation => salvoLocations != null ? salvoLocations.Any(salvoLocation => salvoLocation == shipLocation) : false)
                                 )
                          .Select(ship=>ship.Type).ToList();
+           
+
         }
 
         public GameState GetGameState()
         {
-            GameState gamestate = GameState.ENTER_SALVO;
-           
             var opponent = GetOpponent();
 
             var ships = Ships.Count();
@@ -73,77 +74,53 @@ namespace Salvo.Models
 
             var sunks = GetSunks().Count();
             var sunksOpponent = opponent?.GetSunks().Count();
-
             //No tengo oponente
-            if(opponent == null)
+            if (opponent == null)
             {
-                gamestate = GameState.PLACE_SHIPS;
-                //No tengo oponente pero sí puse los barcos
-                if(ships == 5)
-                {
-                    gamestate = GameState.WAIT;
-                }
+                return GameState.PLACE_SHIPS;
             }
-            //Tengo oponente, puse mís barcos pero él no
-            if(ships == 5 && shipsOpponent == 0)
+
+            //No posicione los barcos, por lo tanto, tengo que hacerlo
+            if (ships == 0)
             {
-                gamestate = GameState.WAIT;
+              return  GameState.PLACE_SHIPS;
             }
 
 
-            //Mi oponente y yo posicionamos los barcos
-            if (ships == 5 && shipsOpponent == 5)
-            { 
-                //Posicionamos los barcos y le toca al que entro antes
-                if(JoinDate < opponent.JoinDate)
-                {
-                    gamestate = GameState.PLACE_SHIPS;
-                }
-                //Entre segundo, por lo tanto tengo que esperar
-                else
-                {
-                    gamestate = GameState.WAIT;
-                }
-                
-            }
-
-            //Posicione los barcos y dispare, pero no es mí turno
+            //Yo tengo más salvos, por lo tanto, tengo que esperar
             if (salvos > salvosOpponent)
             {
-                gamestate = GameState.WAIT;
+                return GameState.WAIT;
             }
-            //Posicione los barcos y el oponente disparo, pero tenemos los mismos salvos
-            if (salvos == salvosOpponent)
+            //Mí oponente tiene más salvos, por lo tanto, tengo que disparar
+            else if(salvos < salvosOpponent)
             {
-                //Posicione los barcos y el oponente disparo, entonces es el turno del que entro antes
-                if (JoinDate < opponent.JoinDate)
+                return GameState.ENTER_SALVO;
+            }
+            //Los 2 tenemos los mismos salvos
+            else 
+            {
+                if(ships == sunks && shipsOpponent == sunksOpponent)
                 {
-                    gamestate = GameState.ENTER_SALVO;
+                    return GameState.TIE;
                 }
-                //Posicione los barcos y dispare, y es el turno del oponente
+                else if(sunks == ships)
+                {
+                    return GameState.LOSS;
+                }
+                else if(shipsOpponent == sunksOpponent)
+                {
+                    return GameState.WIN;
+                }
+                else if(JoinDate < opponent.JoinDate)
+                {
+                    return GameState.ENTER_SALVO;
+                }
                 else
                 {
-                    gamestate = GameState.WAIT;
+                    return GameState.WAIT;
                 }
             }
-
-
-            if (sunks == 5)
-            {
-                gamestate = GameState.WIN;
-            }
-            if(sunksOpponent == 5)
-            {
-                gamestate = GameState.LOSS;
-            }
-            if(sunks == 5 && sunksOpponent == 5)
-            {
-                gamestate = GameState.TIE;
-            }
-            
-            
-
-            return gamestate;
         }
 
     }

@@ -13,5 +13,5 @@ namespace Salvo.Models
         WIN,
         LOSS,
         TIE
-    }
+    } 
 }

@@ -48,6 +48,7 @@ namespace Salvo.Controllers
                             Player = new PlayerDTO
                             {
                                 Id = gp.Player.Id,
+                                Name = gp.Player.Name,
                                 Email = gp.Player.Email
                             },
                             Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null

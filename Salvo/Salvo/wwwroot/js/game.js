@@ -3,6 +3,7 @@
     data: {
         games: [],
         scores: [],
+        name: "",
         email: "",
         password: "",
         modal: {
@@ -40,7 +41,7 @@
         returnGame(gpId) {
             window.location.href = '/game.html?gp=' + gpId;
         },
-        getGames: function() {
+        getGames: function (){
             this.showLogin(false);
             axios.get('/api/games')
                 .then(response => {
@@ -54,13 +55,13 @@
                     alert("erro al obtener los datos");
                 });
         },
-        showModal: function(show) {
+        showModal: function (show) {
             if (show)
                 $("#infoModal").modal('show');
             else
                 $("#infoModal").modal('hide');
         },
-        showLogin: function(show) {
+        showLogin: function (show) {
             if (show) {
                 $('#botonLogin').show();
                 $('#botonRegister').show();
@@ -77,20 +78,21 @@
             }
         },
 
-        mostrarFormLogin: function() {
+        mostrarFormLogin: function () {
             $('#signin-btn').hide();
             $('#login-btn').show();
             $('#titleForm').text("Login");
-
+            $('#inputLoginName').hide();
         },
 
-        mostrarFormRegister: function() {
+        mostrarFormRegister: function () {
             $('#login-btn').hide();
             $('#signin-btn').show();
             $('#titleForm').text("Register");
+            $('#inputLoginName').show();
         },
 
-        logout: function() {
+        logout: function () {
             axios.post('/api/auth/logout')
                 .then(result => {
                     if (result.status == 200) {
@@ -102,11 +104,10 @@
                     alert("Ocurrió un error al cerrar sesión");
                 });
         },
-        login: function(event) {
+        login: function (event) {
             axios.post('/api/auth/login', {
-                    email: this.email,
-                    password: this.password
-                })
+                email: this.email, password: this.password
+            })
                 .then(result => {
                     if (result.status == 200) {
                         this.showLogin(false);
@@ -126,11 +127,10 @@
                     }
                 });
         },
-        signin: function(event) {
+        signin: function (event) {
             axios.post('/api/players', {
-                    email: this.email,
-                    password: this.password
-                })
+                name: this.name, email: this.email, password: this.password
+            })
                 .then(result => {
                     if (result.status == 201) {
                         this.login();
@@ -149,7 +149,7 @@
                     }
                 });
         },
-        getScores: function(games) {
+        getScores: function (games) {
             var scores = [];
             games.forEach(game => {
                 game.gamePlayers.forEach(gp => {
@@ -190,7 +190,7 @@
     },
     filters: {
         dateFormat(date) {
-            return moment(date).format('LLL');
+            return moment(date).format('DD-MM-YYYY');
         }
     }
 })
