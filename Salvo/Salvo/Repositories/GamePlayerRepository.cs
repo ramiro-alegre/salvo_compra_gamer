@@ -33,7 +33,7 @@ namespace Salvo.Repositories
                                                     .ThenInclude(gp => gp.Ships)
                                                         .ThenInclude(ship => ship.Locations)
                                             )
-
+                
                 .Where(gamePlayer => gamePlayer.Id == idGamePlayer)
                 //.AsParallel()
                 .OrderBy(game => game.JoinDate)
@@ -53,16 +53,23 @@ namespace Salvo.Repositories
         {
             return FindByCondition(gp => gp.Id == id)
                     .Include(gp => gp.Game)
-                        .ThenInclude(game => game.GamePlayers.Where(gamePlayer => gamePlayer.Id != id))
-                            .ThenInclude(gp => gp.Salvos)        
+                        .ThenInclude(game => game.GamePlayers) 
+                            .ThenInclude(gp => gp.Salvos)     //Salvos locations del oponente
+                                .ThenInclude(salvo => salvo.Locations)
                     .Include(gp => gp.Game)
-                        .ThenInclude(game => game.GamePlayers.Where(gamePlayer => gamePlayer.Id != id))
-                            .ThenInclude(gp => gp.Ships)
-                    .Include(gp => gp.Player)
-                    .Include(gp => gp.Ships)
+                        .ThenInclude(game => game.GamePlayers) 
+                            .ThenInclude(gp => gp.Ships)  //Ships locations del oponente
+                                .ThenInclude(ship => ship.Locations)    
                     .Include(gp => gp.Salvos)
-                    
+                        //.ThenInclude(salvo => salvo.Locations) //Salvos locations mios 
+                    .Include(gp => gp.Ships)
+
+                       // .ThenInclude(ship => ship.Locations) //Ships locations mios 
+                    .Include(gp => gp.Player)
+
                     .FirstOrDefault();
         }
+
+        
     }
 }

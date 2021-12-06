@@ -31,7 +31,8 @@ namespace Salvo
             services.AddRazorPages();
             //inyección de dependencia para salvo context
             services.AddDbContext<SalvoContext>(opt => 
-                opt.UseSqlServer(Configuration.GetConnectionString("SalvoDataBase")));
+                opt.UseSqlServer(Configuration.GetConnectionString("SalvoDataBase"),
+                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddScoped<IGameRepository, GameRepository>();
             services.AddScoped<IGamePlayerRepository, GamePlayerRepository>();

@@ -46,7 +46,7 @@ namespace Salvo.Models
 
         public ICollection<String> GetSunks()
         {
-            List<String> asd = new List<string>();
+           
             
             int lastTurn = Salvos.Count;
             List<String> salvoLocations = 
@@ -54,7 +54,9 @@ namespace Salvo.Models
                 .Where(salvo=> salvo.Turn <= lastTurn)
                 .SelectMany(salvo => salvo.Locations.Select(location => location.Location)).ToList();
 
-                return Ships?.Where (ship => ship.Locations.Select(shipLocation => shipLocation.Location)
+                
+
+            return Ships?.Where (ship => ship.Locations.Select(shipLocation => shipLocation.Location)
                          .All(shipLocation => salvoLocations != null ? salvoLocations.Any(salvoLocation => salvoLocation == shipLocation) : false)
                                 )
                          .Select(ship=>ship.Type).ToList();
@@ -66,14 +68,14 @@ namespace Salvo.Models
         {
             var opponent = GetOpponent();
 
-            var ships = Ships.Count();
-            var shipsOpponent = opponent?.Ships.Count();
+            var ships = Ships.Count;
+            var shipsOpponent = opponent?.Ships.Count;
 
-            var salvos = Salvos.Count();
-            var salvosOpponent = opponent?.Salvos.Count();
+            var salvos = Salvos.Count;
+            var salvosOpponent = opponent?.Salvos.Count;
 
-            var sunks = GetSunks().Count();
-            var sunksOpponent = opponent?.GetSunks().Count();
+            var sunks = GetSunks().Count;
+            var sunksOpponent = opponent?.GetSunks().Count;
             //No tengo oponente
             if (opponent == null)
             {

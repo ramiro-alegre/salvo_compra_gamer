@@ -13,4 +13,6 @@ namespace Salvo.Models
         public ICollection<GamePlayer> GamePlayers { get; set; }
         public ICollection<Score> Scores { get; set; }
     }
+
+
 }

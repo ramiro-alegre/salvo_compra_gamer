@@ -64,6 +64,26 @@ namespace Salvo.Controllers
             
         }
 
+        [HttpGet("/topShips")]
+        [AllowAnonymous]
+        public IActionResult GetTopShipsDestroyed()
+        {
+            try
+            {
+                IEnumerable <String> shipLocations = _repository.GetAllGamesWithPlayers()
+                .SelectMany(game => game.GamePlayers
+                    .SelectMany(gp => gp.Ships)
+                        .SelectMany(ship => ship.Locations)
+                            .Select(location => location.Location)).ToList();
+                            
+
+                return Ok();
+            }catch(Exception ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+        }
+
         [HttpPost]
         public IActionResult Post()
         {
