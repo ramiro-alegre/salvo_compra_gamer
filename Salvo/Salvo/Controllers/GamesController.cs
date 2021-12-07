@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Salvo.Models;
 using Salvo.Repositories;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,20 +65,62 @@ namespace Salvo.Controllers
             
         }
 
-        [HttpGet("/topShips")]
+        [HttpGet("topTypes")]
         [AllowAnonymous]
-        public IActionResult GetTopShipsDestroyed()
+        public IActionResult GetTopTypeDestroyed()
         {
             try
             {
-                IEnumerable <String> shipLocations = _repository.GetAllGamesWithPlayers()
-                .SelectMany(game => game.GamePlayers
-                    .SelectMany(gp => gp.Ships)
-                        .SelectMany(ship => ship.Locations)
-                            .Select(location => location.Location)).ToList();
-                            
+                List<String> Sunks = new List<String>();
+                var games = _repository.GetAllGamesWithPlayersAndSalvos();
+                 foreach(var game in games)
+                  {
+                      foreach(var gp in game.GamePlayers)
+                      {
+                          Sunks.AddRange(gp.GetSunks());
+                      }
+                  }
+                var types = Sunks
+                     .GroupBy(i => i)
+                     .OrderByDescending(g => g.Count());
 
-                return Ok();
+                IEnumerable sunksTop5 = types.Take(5).Select(type => new
+                {
+                    type = type.First(),
+                    quantity = type.Count()
+                });
+
+
+                return Ok(sunksTop5);
+            }catch(Exception ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+        }
+
+
+        [HttpGet("topLocations")]
+        [AllowAnonymous]
+        public IActionResult GetTopLocationsDestroyed()
+        {
+            try
+            {   
+                IEnumerable<String> salvoLocations = _repository.GetAllSalvoLocations()
+                .SelectMany(game => game.GamePlayers)
+                    .SelectMany(gp => gp.Salvos)
+                        .SelectMany(salvo => salvo.Locations)
+                            .Select(location => location.Location);
+
+                var locations = salvoLocations
+                     .GroupBy(i => i)
+                     .OrderByDescending(g => g.Count());
+
+                IEnumerable mayores = locations.Take(5).Select(location => new
+                {
+                    position = location.First(),
+                    quantity = location.Count()
+                }) ;
+                return Ok(mayores);
             }catch(Exception ex)
             {
                 return StatusCode(403, ex.Message);

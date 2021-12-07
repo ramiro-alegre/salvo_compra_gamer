@@ -1,16 +1,28 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title>Salvo games!</title>
+
+    <!--/Agregado-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <!--/Agregado-->
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="css/salvo.css" />
-    <title>Salvo games!</title>
+
+
+
 </head>
+
 <body>
     <div id="app">
         <!-- Image and text -->
@@ -42,7 +54,7 @@
             <br /><br />
             <div class="row justify-content-center">
                 <div class="col-7">
-                    <h1>¡¡ Bienvenid@ a la Batalla Naval!!</h1>
+                    <h1>Bienvenido/a a la batalla naval :D</h1>
                 </div>
             </div>
             <div class="row mt-5">
@@ -58,7 +70,8 @@
                                 <li class="gameListElements text-center">
                                     <small>{{game.creationDate | dateFormat}}</small>
                                     <div v-if="game.gamePlayers.length == 2">
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts">{{ game.gamePlayers[1].player.name }}</h3>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[1].player.name }}</h3>
                                         <div v-if="player != 'Guest' && game.gamePlayers[0].player.email == player">
                                             <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
                                         </div>
@@ -67,26 +80,32 @@
                                         </div>
                                     </div>
                                     <div v-else-if="game.gamePlayers[0].player.email != player && player != 'Guest'">
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts"> Sin Oponente</h3>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <h3 class="gameListTexts"> Sin Oponente</h3>
                                         <br />
                                         <button class="btn btn-success btn-sm" v-on:click="joinGame(game.id)">Unirse al juego</button>
                                     </div>
                                     <div v-else-if="player != 'Guest'">
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts"> Sin Oponente</h3>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <h3 class="gameListTexts"> Sin Oponente</h3>
                                         <br />
                                         <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
                                     </div>
                                     <div v-else>
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span><h3 class="gameListTexts"> Sin Oponente</h3>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <h3 class="gameListTexts"> Sin Oponente</h3>
                                     </div>
                                     <span class="clearfix"></span>
                                 </li>
                             </ul>
                         </li>
+
+
                     </ul>
+
                 </div>
                 <div class="col">
-                    <h2>L&iacute;deres</h2>
+                    <h2 class="text-center">L&iacute;deres</h2>
                     <table class="table">
                         <thead>
                             <tr>
@@ -107,6 +126,42 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <h2 class="text-center">Locaciones más atacadas</h2>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="topLocation in topLocations">
+                                <td>{{ topLocation.position}}</td>
+                                <td>{{ topLocation.quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 class="text-center">Barcos más hundidos</h2>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="topType in topTypes">
+                                <td>{{ topType.type}}</td>
+                                <td>{{ topType.quantity}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
                 </div>
             </div>
         </div>
@@ -163,6 +218,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!--/Agregado-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <!--/Agregado-->
     <script src="js/game.js"></script>
 </body>
+
 </html>

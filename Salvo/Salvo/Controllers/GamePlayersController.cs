@@ -179,6 +179,8 @@ namespace Salvo.Controllers
                 if ((gp.Salvos.Count == gameplayer.Salvos.Count) && gp.JoinDate > gameplayer.JoinDate)
                     return StatusCode(403, "No es su turno");
 
+                
+
                 GameState gameState = gp.GetGameState();
 
                 if (gameState == GameState.LOSS || gameState == GameState.WIN || gameState == GameState.TIE) {

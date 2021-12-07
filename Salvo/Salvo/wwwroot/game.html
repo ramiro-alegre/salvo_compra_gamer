@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -15,13 +16,13 @@
     <link rel="stylesheet" href="css/style.css" />
     <title>Salvo games!</title>
 </head>
+
 <body>
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="#">
-                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
-                Salvo
+            <a class="navbar-brand" href="index.html">
+                <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> Salvo
                 <div id="playersList">
                     <span id="playerOne">{{ player.email }}</span>
                     <span v-if="opponent.email != null"> vs {{ opponent.email }}</span>
@@ -292,4 +293,5 @@
     <script src="dist/jquery.ui.touch-punch.min.js"></script>
     <script src="js/gameView.js"></script>
 </body>
+
 </html>
