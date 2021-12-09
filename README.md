@@ -4,7 +4,7 @@
 
 Este es el proyecto dado en el BootCamp en BackEnd .NET en MindHub, en el mismo, se programa el BackEnd de la batalla naval. 
 
-**Se hace uso del patron MVC(Modelo, Vista, Controlador), además de tener migraciones y utilizar "Code First". Gracias a esto, se crea una API REST, que el front consume.**
+**Se hace uso del patron MVC(Modelo, Vista, Controlador), autenticación y autorización, además de tener migraciones y utilizar "Code First". Gracias a esto, se crea una API REST, que el front consume.**
 
 **Como dato extra, se utilizan DTO's para obtener unicamente los datos necesarios, no realizar peticiones pesadas y no comprometerlos.**
 
