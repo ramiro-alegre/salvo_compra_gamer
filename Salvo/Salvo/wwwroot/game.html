@@ -21,7 +21,7 @@
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="#">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> Salvo
                 <div id="playersList">
                     <span id="playerOne">{{ player.email }}</span>
@@ -31,8 +31,12 @@
             <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
         </nav>
         <div class="container mt-2">
+            <div class="row" style="padding:15px">
+                <a class=" ml-1 my-2 my-sm-0" href="index.html">Volver</a>
+            </div>
+
             <div class="row mb-3">
-                <div class="col">
+                <div class="col-xs-12 col-md-6 pl-4">
                     <div class="row">
                         <div class="col">
                             <h2>Barcos</h2>
@@ -47,21 +51,22 @@
                     </div>
                     <div class="row mt-1">
                         <div class="col">
-                            <button v-if="gameView.ships && gameView.ships.length < 5" class="btn btn-success btn-sm mb-3" v-on:click="placeShips()">Posicionar barcos!!</button>
                             <div class="grid-ships">
                                 <!-- div que usa la librería gridstack grid-stack-10 se indica que son 10 columnas-->
                                 <div id="grid" class="grid-stack grid-stack-10">
 
                                 </div>
                             </div>
+                            <button v-if="gameView.ships && gameView.ships.length < 5" class="btn btn-success btn-sm mb-3" v-on:click="placeShips()">Posicionar barcos!!</button>
                         </div>
                     </div>
                 </div>
-                <div class="col">
+
+                <div class="col-xs-12 col-md-6 pr-4">
                     <div class="row">
                         <div class="col">
-                            <h2>Salvos</h2>
-                            <div class="shipsStatus">
+                            <h2 class="textEnd">Salvos</h2>
+                            <div class="shipsStatus ml-auto">
                                 <span><img id="OpponentCarrierIcon" src="img/carrierafloat.png"></span>
                                 <span><img id="OpponentBattleShipIcon" src="img/battleshipafloat.png"></span>
                                 <span><img id="OpponentSubmarineIcon" src="img/submarineafloat.png"></span>
@@ -72,7 +77,6 @@
                     </div>
                     <div class="row mt-1">
                         <div class="col">
-                            <button v-if="gameView.gameState == 'ENTER_SALVO'" class="btn btn-success btn-sm mb-3" v-on:click="placeSalvos()">Disparar salvos!!</button>
                             <table class="salvo-table">
                                 <thead>
                                     <tr>
@@ -222,28 +226,27 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <button v-if="gameView.gameState == 'ENTER_SALVO'" class="btn btn-success btn-sm mb-3" v-on:click="placeSalvos()">Disparar salvos!!</button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div id="game-state">
-                                <span>{{gameState}}</span>
-                                <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
-                                <div v-else-if="gameView.gameState == 'PLACE_SHIPS'" class="img-state img-state-ship"></div>
-                                <div v-else-if="gameView.gameState == 'ENTER_SALVO'" class="img-state img-state-fire"></div>
-                                <div v-else-if="gameView.gameState == 'WIN'" class="img-state img-state-win"></div>
-                                <div v-else-if="gameView.gameState == 'LOSS'" class="img-state img-state-loss"></div>
-                                <div v-else-if="gameView.gameState == 'TIE'" class="img-state img-state-tie"></div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div class="row" style="display: flex; justify-content: center;">
+                <div id="game-state">
+                    <span>{{gameState}}</span>
+                    <div v-if="gameView.gameState == 'WAIT'" class="img-state img-state-wait"></div>
+                    <div v-else-if="gameView.gameState == 'PLACE_SHIPS'" class="img-state img-state-ship"></div>
+                    <div v-else-if="gameView.gameState == 'ENTER_SALVO'" class="img-state img-state-fire"></div>
+                    <div v-else-if="gameView.gameState == 'WIN'" class="img-state img-state-win"></div>
+                    <div v-else-if="gameView.gameState == 'LOSS'" class="img-state img-state-loss"></div>
+                    <div v-else-if="gameView.gameState == 'TIE'" class="img-state img-state-tie"></div>
                 </div>
             </div>
             <div class="row mt-2">
                 <div class="col">
                     <div class="row">
-                        <div class="col">
-                            <table class="table table-sm table-dark table-striped">
+                        <div class="col-xs-12 col-md-6 pl-4">
+                            <table class="table table-sm table-dark table-striped tablaTurnosDaños">
                                 <thead>
                                     <tr>
                                         <th>Turno</th>
@@ -258,8 +261,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col">
-                            <table class="table table-sm table-dark table-striped">
+
+                        <div class="col-xs-12 col-md-6 pr-4">
+                            <table class="table table-sm table-dark ml-auto table-striped tablaTurnosDaños">
                                 <thead>
                                     <tr>
                                         <th>Turno</th>

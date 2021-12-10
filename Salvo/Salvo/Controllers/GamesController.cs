@@ -37,6 +37,7 @@ namespace Salvo.Controllers
                 GameListDTO gameList = new GameListDTO
                 {
                     Email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest",
+                    Avatar = User.FindFirst("Avatar") != null ? User.FindFirst("Avatar").Value : "Images/1.jpg",
                     Games = _repository.GetAllGamesWithPlayers()
                     .Select(game => new GameDTO
                     {
@@ -49,8 +50,9 @@ namespace Salvo.Controllers
                             Player = new PlayerDTO
                             {
                                 Id = gp.Player.Id,
-                                Name = gp.Player.Name,
-                                Email = gp.Player.Email
+                                Name = (gp.Player.Name.Length > 10) ? gp.Player.Name.Substring(0, 10) + "..." : gp.Player.Name,
+                                Email = gp.Player.Email,
+                                Avatar = gp.Player.Avatar
                             },
                             Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
                         }).ToList()

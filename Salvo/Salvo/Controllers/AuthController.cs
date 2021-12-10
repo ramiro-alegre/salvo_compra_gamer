@@ -36,7 +36,8 @@ namespace Salvo.Controllers
                 }
                 var claims = new List<Claim>
                     {
-                        new Claim("Player", user.Email)
+                        new Claim("Player", user.Email),
+                        new Claim("Avatar", user.Avatar)
                     };
 
                 var claimsIdentity = new ClaimsIdentity(

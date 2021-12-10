@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Salvo.Models
 {
-    public class PlayerDTO
+    public class PasswordPlayerDTO
     {
         public long Id { get; set; }
-        public string Email { get; set; }
-        public string Name { get; set; }
         public string Password { get; set; }
-        public string Avatar { get; set; }
+        public string NewPassword { get; set; }
+        public string NewPasswordRepeat { get; set; }
+
     }
 }

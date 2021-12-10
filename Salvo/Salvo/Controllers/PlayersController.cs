@@ -21,14 +21,7 @@ namespace Salvo.Controllers
         {
             _repository = repository;
         }
-        
 
-        // GET api/<PlayersController>/5
-        [HttpGet("{id}", Name = "GetPlayer")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/<PlayersController>
         [HttpPost]
@@ -56,7 +49,8 @@ namespace Salvo.Controllers
                 {
                     Email = player.Email,
                     Password = player.Password,
-                    Name = player.Name
+                    Name = player.Name,
+                    Avatar = "1.jpg"
                 };
 
                 _repository.Save(newPlayer);
@@ -70,5 +64,6 @@ namespace Salvo.Controllers
         }
 
        
+
     }
 }

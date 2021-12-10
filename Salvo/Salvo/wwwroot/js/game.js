@@ -12,7 +12,10 @@
             tittle: "",
             message: ""
         },
+        currentPage: 1,
+        perPage: 7,
         player: null,
+        avatar: null,
         vuetify: new Vuetify()
     },
     mounted() {
@@ -52,6 +55,7 @@
                 .then(response => {
                     this.player = response.data.email;
                     this.games = response.data.games;
+                    this.avatar = response.data.avatar;
                     this.getScores(this.games)
                     if (this.player == "Guest")
                         this.showLogin(true);
@@ -83,6 +87,7 @@
             }
         },
 
+
         mostrarFormLogin: function() {
             $('#signin-btn').hide();
             $('#login-btn').show();
@@ -96,6 +101,8 @@
             $('#titleForm').text("Register");
             $('#inputLoginName').show();
         },
+
+
 
         getTopLocations: function() {
             axios.get('/api/games/topLocations')
@@ -114,6 +121,10 @@
                 .catch(error => {
                     alert("error al obtener los datos");
                 });
+        },
+
+        moveToPerfil: function() {
+            window.location.href = '/perfil.html';
         },
 
 
@@ -216,11 +227,31 @@
                 })
             })
             app.scores = scores;
+        },
+        getImgUrl(image) {
+            return `../images/${image}.png`
         }
+
     },
     filters: {
         dateFormat(date) {
             return moment(date).format('DD-MM-YYYY');
         }
+    },
+    computed: {
+        lists() {
+            const items = this.games;
+            // Return just page of items needed
+            return items.slice(
+                (this.currentPage - 1) * this.perPage,
+                this.currentPage * this.perPage
+            )
+        },
+        totalRows() {
+            return this.games.length
+        }
+    },
+    created() {
+        this.getGames();
     }
 })

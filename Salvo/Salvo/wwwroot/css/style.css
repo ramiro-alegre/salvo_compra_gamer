@@ -6,7 +6,7 @@
     left: 0px !important;
 }
 
-.CarrierHorizontal{
+.CarrierHorizontal {
     background-image: url('../img/carrierhor.png');
     background-size: contain;
 }
@@ -61,11 +61,10 @@
     width: 42px !important;
 }
 
-
 .grid-ships {
     border: solid black;
-    height: 450px;
     width: 450px;
+    height: 450px;
     background-image: url('../img/grid-bkg.png');
     background-size: contain;
     padding-left: 42px;
@@ -73,13 +72,16 @@
     position: relative;
 }
 
-.salvo-table{
+.salvo-table {
     border: solid black 1px;
     background-image: url('../img/backships.gif');
     background-size: contain;
+    margin-left: auto;
+    width: 450px;
+    height: 450px;
 }
 
-.salvo-table th{
+.salvo-table th {
     background-color: rgb(5 13 78);
     text-align: center;
 }
@@ -89,14 +91,15 @@
     text-align: center;
 }
 
-.salvo-table th, .salvo-table td {
+.salvo-table th,
+.salvo-table td {
     border: solid black 1px;
     width: 30px;
     height: 30px;
     text-align: center;
 }
 
-.shoot{
+.shoot {
     background-image: url('../img/targetself.png');
     background-size: contain;
 }
@@ -121,7 +124,7 @@
     background-size: cover;
 }
 
-#playersList{
+#playersList {
     display: inline;
     margin-left: 20px;
     color: black;

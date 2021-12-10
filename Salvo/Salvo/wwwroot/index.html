@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.css" />
     <!--/Agregado-->
 
     <!-- Bootstrap CSS -->
@@ -37,7 +38,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 </ul>
-                <span id="user-name" v-if="player != 'Guest'">{{ player }} </span>
+                <a id="user-name" v-if="player != 'Guest'" data-toggle="modal" v-on:click="moveToPerfil" id="botonPerfil">
+
+                    <template>
+
+                          <v-avatar>
+                            <img class="circle-perfil" v-bind:src="'images/' + avatar" alt="image Perfil">
+                          </v-avatar>
+                
+                   </template>
+                </a>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary formButton" data-toggle="modal" data-target="#exampleModal" id="botonLogin" v-on:click="mostrarFormLogin">
                     Login
@@ -61,17 +71,28 @@
                 <div class="col">
                     <div>
                         <h2 id="games-list">Juegos</h2>
-                        <button v-if="player != 'Guest'" v-on:click="createGame()" id="create-btn" class="btn btn-success btn-sm ml-1 my-2 my-sm-0" type="button">Crear juego!</button>
+                        <button v-if="player != 'Guest'" v-on:click="createGame()" id="create-btn" class="btn btn-sm ml-1 my-2 my-sm-0 btn-salvo" type="button">Crear juego!</button>
                     </div>
                     <ul class="">
-                        <li v-for="game in games">
+                        <li v-for="game in lists">
                             <ul>
                                 <!--v-for="gamePlayer in game.gamePlayers" class="col-md-6" style="display:inline-block"-->
                                 <li class="gameListElements text-center">
                                     <small>{{game.creationDate | dateFormat}}</small>
                                     <div v-if="game.gamePlayers.length == 2">
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <template>
+                                            <v-avatar>
+                                              <img class="circle-perfil" v-bind:src="'images/' + game.gamePlayers[0].player.avatar"  alt="image">
+                                            </v-avatar>
+                                     </template>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3>
+                                        <span class="gameListTexts"> - VS - </span>
                                         <h3 class="gameListTexts">{{ game.gamePlayers[1].player.name }}</h3>
+                                        <template>
+                                            <v-avatar>
+                                              <img class="circle-perfil" v-bind:src="'images/' + game.gamePlayers[1].player.avatar"  alt="image">
+                                            </v-avatar>
+                                     </template>
                                         <div v-if="player != 'Guest' && game.gamePlayers[0].player.email == player">
                                             <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
                                         </div>
@@ -80,19 +101,43 @@
                                         </div>
                                     </div>
                                     <div v-else-if="game.gamePlayers[0].player.email != player && player != 'Guest'">
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <template>
+                                            <v-avatar>
+                                              <img class="circle-perfil" v-bind:src="'images/' + game.gamePlayers[0].player.avatar"  alt="image">
+                                            </v-avatar>
+                                     </template>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3>
+
+                                        <span class="gameListTexts"> - VS - </span>
+
                                         <h3 class="gameListTexts"> Sin Oponente</h3>
                                         <br />
                                         <button class="btn btn-success btn-sm" v-on:click="joinGame(game.id)">Unirse al juego</button>
                                     </div>
                                     <div v-else-if="player != 'Guest'">
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <template>
+                                            <v-avatar>
+                                              <img class="circle-perfil" v-bind:src="'images/' + game.gamePlayers[0].player.avatar"  alt="image">
+                                            </v-avatar>
+                                     </template>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3>
+
+                                        <span class="gameListTexts"> - VS - </span>
+
                                         <h3 class="gameListTexts"> Sin Oponente</h3>
                                         <br />
                                         <button class="btn btn-primary btn-sm" v-on:click="returnGame(game.gamePlayers[0].id)">Ingresar al Juego</button>
                                     </div>
                                     <div v-else>
-                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3><span class="gameListTexts"> - VS - </span>
+                                        <template>
+                                            <v-avatar>
+                                              <img class="circle-perfil" v-bind:src="'images/' + game.gamePlayers[0].player.avatar"  alt="image">
+                                            </v-avatar>
+                                     </template>
+                                        <h3 class="gameListTexts">{{ game.gamePlayers[0].player.name }}</h3>
+
+                                        <span class="gameListTexts"> - VS - </span>
+
                                         <h3 class="gameListTexts"> Sin Oponente</h3>
                                     </div>
                                     <span class="clearfix"></span>
@@ -102,6 +147,7 @@
 
 
                     </ul>
+                    <b-pagination :total-rows="totalRows" v-model="currentPage" :per-page="perPage" />
 
                 </div>
                 <div class="col">
@@ -209,6 +255,8 @@
             </div>
         </div>
         <!-- /Modal -->
+
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
@@ -221,6 +269,7 @@
     <!--/Agregado-->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.min.js"></script>
     <!--/Agregado-->
     <script src="js/game.js"></script>
 </body>

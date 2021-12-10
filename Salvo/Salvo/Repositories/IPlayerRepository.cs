@@ -10,5 +10,6 @@ namespace Salvo.Repositories
     {
          Player FindByMail(string email);
          void Save(Player player);
+         void Update(Player player);
     }
 }
