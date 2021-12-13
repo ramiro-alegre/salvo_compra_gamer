@@ -6,7 +6,7 @@ var app = new Vue({
         password: "",
         newPassword: "",
         newPasswordRepeat: "",
-        image: "",
+        avatar: "",
         permisse: ""
     },
     mounted() {
@@ -57,7 +57,8 @@ var app = new Vue({
             axios.get('/api/settings')
                 .then(result => {
                     this.name = result.data.name,
-                        this.email = result.data.email
+                        this.email = result.data.email,
+                        this.avatar = result.data.avatar
                 })
                 .catch(error => {
                     console.log("error, código de estatus: " + error.response.status);
@@ -74,7 +75,7 @@ var app = new Vue({
                     $('#message').text("Modificado");
                     setTimeout(() => {
                         $('.close').click();
-                    }, 2000);
+                    }, 200);
 
                 })
                 .catch(error => {
@@ -93,7 +94,7 @@ var app = new Vue({
                     $('#message').text("Modificado");
                     setTimeout(() => {
                         $('.close').click();
-                    }, 2000);
+                    }, 200);
                 })
                 .catch(error => {
                     console.log("Error, Código de status: " + error.response.status);
@@ -112,7 +113,7 @@ var app = new Vue({
                     $('#message').text("Modificado");
                     setTimeout(() => {
                         $('.close').click();
-                    }, 2000);
+                    }, 200);
                 })
                 .catch(error => {
                     console.log("Error, Código de status: " + error.response.status);
@@ -126,6 +127,22 @@ var app = new Vue({
                 .catch(error => {
                     this.permisse = error.data;
                     window.location.href = '/index.html';
+                })
+        },
+
+        ChangeAvatar: function() {
+            let input = $("#avatar-form input[type='radio']:checked").val();
+            axios.put('/api/settings/avatar', {
+                    avatar: input
+                })
+                .then(result => {
+                    this.avatar = input;
+                    setTimeout(() => {
+                        $('.close').click();
+                    }, 200);
+                })
+                .catch(error => {
+                    console.log("Error, Código de status: " + error.response.status);
                 })
         },
 

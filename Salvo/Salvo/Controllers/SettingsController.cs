@@ -70,7 +70,8 @@ namespace Salvo.Controllers
                 PlayerDTO player = new PlayerDTO
                 {
                     Name = dbPlayer.Name,
-                    Email = email
+                    Email = email,
+                    Avatar = dbPlayer.Avatar
                 };
 
                 return Ok(player);
@@ -153,12 +154,14 @@ namespace Salvo.Controllers
                     Id = dbPlayer.Id,
                     Name = dbPlayer.Name,
                     Email = player.Email,
-                    Password = dbPlayer.Password
+                    Password = dbPlayer.Password,
+                    Avatar = dbPlayer.Avatar
                 };
 
                 var claims = new List<Claim>
                 {
-                    new Claim("Player", newPlayer.Email)
+                    new Claim("Player", newPlayer.Email),
+                    new Claim("Avatar", dbPlayer.Avatar)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(
@@ -221,6 +224,53 @@ namespace Salvo.Controllers
             }
         }
 
-      
+        [HttpPut("avatar")]
+        public async Task<IActionResult> ChangeAvatar([FromBody] PlayerDTO player)
+        {
+            try
+            {
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+
+                if (email == "Guest")
+                    return StatusCode(403, "Ocurrio un error");
+
+                Player dbPlayer = _repository.FindByMail(email);
+
+                if (dbPlayer == null)
+                    return StatusCode(403, "Ocurrio un error");
+
+
+                Player newPlayer = new Player
+                {
+                    Id = dbPlayer.Id,
+                    Name = dbPlayer.Name,
+                    Email = email,
+                    Password = dbPlayer.Password,
+                    Avatar = player.Avatar
+                };
+                var claims = new List<Claim>
+                {
+                    new Claim("Avatar", newPlayer.Avatar),
+                    new Claim("Player", email)
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme
+                );
+
+                await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity)
+                );
+
+                _repository.Save(newPlayer);
+
+                return StatusCode(201, newPlayer.Avatar);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+        }
     }
 }

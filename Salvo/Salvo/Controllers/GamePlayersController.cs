@@ -63,6 +63,7 @@ namespace Salvo.Controllers
                         {
                             Id = gps.Player.Id,
                             Email = gps.Player.Email,
+                            Avatar = gps.Player.Avatar
                         }
                     }).ToList(),
                     Salvos = gp.Game.GamePlayers.SelectMany(gps => gps.Salvos.Select(salvo => new SalvoDTO

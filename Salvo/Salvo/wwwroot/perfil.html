@@ -25,7 +25,7 @@
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light navbar-expand-md justify-content-between">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/index.html">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> Salvo
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@
                 <div class="col d-flex justify-content-center">
                     <div class="container__img">
                         <button data-toggle="modal" data-target="#imagesModal">
-                            <img src="/Images/1.jpg" class="img" alt="Image Perfil">
+                            <img v-bind:src="'images/' + avatar" class="img" alt="Image Perfil">
                         </button>
                     </div>
                 </div>
@@ -114,69 +114,69 @@
                                 </button>
                     </div>
                     <div class="modal-body">
-                        <form id="login-form" class="my-2 my-lg-0">
+                        <form id="avatar-form" class="my-2 my-lg-0">
                             <div class="container__general centerForm">
                                 <div>
                                     <v-avatar size="128">
                                         <img src="/Images/1.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="1.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
                                         <img src="/Images/2.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="2.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/3.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="3.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/4.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="4.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/5.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="5.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/1.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="1.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/1.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="1.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/1.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="1.jpg" name="imagen">
                                 </div>
 
                                 <div>
                                     <v-avatar size="128">
-                                        <img src="/Images/2.jpg" alt="image" class="img">
+                                        <img src="/Images/1.jpg" alt="image" class="img">
                                     </v-avatar>
-                                    <input type="radio">
+                                    <input type="radio" value="1.jpg" name="imagen">
                                 </div>
 
 
@@ -184,7 +184,7 @@
 
 
 
-                            <button id="changePassword-btn" v-on:click="ChangePassword" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Guardar</button>
+                            <button id="changeAvatar-btn" v-on:click="ChangeAvatar" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Guardar</button>
                             <span id="message"></span>
                         </form>
                     </div>

@@ -6,6 +6,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!--/Agregado-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.css" />
+    <!--/Agregado-->
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
@@ -21,14 +28,28 @@
     <div id="app">
         <!-- Image and text -->
         <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/index.html">
                 <img src="img/target.jpg" width="30" height="30" class="d-inline-block align-top" alt=""> Salvo
                 <div id="playersList">
                     <span id="playerOne">{{ player.email }}</span>
                     <span v-if="opponent.email != null"> vs {{ opponent.email }}</span>
                 </div>
             </a>
-            <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
+            <div>
+                <a id="user-name" v-if="player != 'Guest'" data-toggle="modal" v-on:click="moveToPerfil" id="botonPerfil">
+
+                    <template>
+    
+                          <v-avatar>
+                            <img class="circle-perfil" v-bind:src="'images/' +  player.avatar" alt="image Perfil">
+                          </v-avatar>
+                
+                   </template>
+                </a>
+
+                <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
+            </div>
+
         </nav>
         <div class="container mt-2">
             <div class="row" style="padding:15px">
@@ -295,6 +316,14 @@
     <script src="dist/gridstack.js"></script>
     <script src="dist/gridstack.jQueryUI.js"></script>
     <script src="dist/jquery.ui.touch-punch.min.js"></script>
+
+
+    <!--/Agregado-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.11/dist/bootstrap-vue.min.js"></script>
+    <!--/Agregado-->
+
     <script src="js/gameView.js"></script>
 </body>
 
