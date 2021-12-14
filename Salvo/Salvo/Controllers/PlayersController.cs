@@ -4,6 +4,8 @@ using Salvo.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -45,10 +47,15 @@ namespace Salvo.Controllers
                 {
                     return StatusCode(403, "Email en uso");
                 }
+
+                byte[] data = Encoding.ASCII.GetBytes(player.Password);
+                data = new SHA256Managed().ComputeHash(data);
+                string passwordHash = Encoding.ASCII.GetString(data);
+
                 Player newPlayer = new Player
                 {
                     Email = player.Email,
-                    Password = player.Password,
+                    Password = passwordHash,
                     Name = player.Name,
                     Avatar = "1.jpg"
                 };

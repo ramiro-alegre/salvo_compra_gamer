@@ -104,7 +104,7 @@ var app = new Vue({
             axios.post('/api/settings/password', {
                     password: this.password,
                     newPassword: this.newPassword,
-                    newPasswordRepeat: this.newPasswordRepeat
+                    newPasswordRepeat: this.newPasswordRepeat,
                 })
                 .then(result => {
                     password = "";

@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -30,7 +32,12 @@ namespace Salvo.Controllers
             try
             {
                 Player user = _repository.FindByMail(player.Email);
-                if (user == null || !String.Equals(user.Password, player.Password)) 
+
+                byte[] data = Encoding.ASCII.GetBytes(player.Password);
+                data = new SHA256Managed().ComputeHash(data);
+                string passwordHash = Encoding.ASCII.GetString(data);
+
+                if (user == null || !String.Equals(user.Password, passwordHash)) 
                 {
                     return Unauthorized();
                 }

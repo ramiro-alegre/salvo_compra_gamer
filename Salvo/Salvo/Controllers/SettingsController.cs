@@ -14,6 +14,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -100,7 +102,11 @@ namespace Salvo.Controllers
                 if (dbPlayer == null)
                     return StatusCode(403, "Ocurrio un error");
 
-                if (dbPlayer.Password != player.Password)
+                byte[] data = Encoding.ASCII.GetBytes(player.Password);
+                data = new SHA256Managed().ComputeHash(data);
+                string passwordHash = Encoding.ASCII.GetString(data);
+
+                if (dbPlayer.Password != passwordHash)
                     return StatusCode(403, "Contraseña Incorrecta");
 
 
@@ -109,7 +115,8 @@ namespace Salvo.Controllers
                     Id = dbPlayer.Id,
                     Name = player.Name,
                     Email = email,
-                    Password = dbPlayer.Password
+                    Password = dbPlayer.Password,
+                    Avatar = dbPlayer.Avatar
                 };
 
                 _repository.Save(newPlayer);
@@ -145,7 +152,11 @@ namespace Salvo.Controllers
                 if (dbPlayer == null)
                     return StatusCode(403, "Ocurrio un error");
 
-                if (dbPlayer.Password != player.Password)
+                byte[] data = Encoding.ASCII.GetBytes(player.Password);
+                data = new SHA256Managed().ComputeHash(data);
+                string passwordHash = Encoding.ASCII.GetString(data);
+
+                if (dbPlayer.Password != passwordHash)
                     return StatusCode(403, "Contraseña Incorrecta");
 
 
@@ -198,11 +209,19 @@ namespace Salvo.Controllers
                 if (dbPlayer == null)
                     return StatusCode(403, "Ocurrio un error");
 
-                if (dbPlayer.Password != player.Password)
+                byte[] data = Encoding.ASCII.GetBytes(player.Password);
+                data = new SHA256Managed().ComputeHash(data);
+                string passwordHash = Encoding.ASCII.GetString(data);
+
+                if (dbPlayer.Password != passwordHash)
                     return StatusCode(403, "Contraseña Incorrecta");
 
-                if(player.NewPassword != player.NewPasswordRepeat)
+                if (player.NewPassword != player.NewPasswordRepeat)
                     return StatusCode(403, "Las contraseñas no coinciden");
+
+                byte[] data2 = Encoding.ASCII.GetBytes(player.NewPassword);
+                data2 = new SHA256Managed().ComputeHash(data2);
+                string newpasswordHash = Encoding.ASCII.GetString(data2);
 
 
 
@@ -211,7 +230,8 @@ namespace Salvo.Controllers
                     Id = dbPlayer.Id,
                     Name = dbPlayer.Name,
                     Email = email,
-                    Password = player.NewPassword
+                    Password = newpasswordHash,
+                    Avatar = dbPlayer.Avatar
                 };
 
                 _repository.Save(newPlayer);
