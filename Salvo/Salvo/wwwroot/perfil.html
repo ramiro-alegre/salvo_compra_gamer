@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <!--/Agregado-->
 
     <!-- Bootstrap CSS -->
@@ -70,8 +71,45 @@
                 </div>
             </div>
 
-            <div class="row mt-5">
-                <!--Estadistica del usuario-->
+            <div class="row mt-5 flex-column align-center justify-content-center">
+                <div class="text-center gamesPlayed">
+                    <h3>Partidas Jugadas</h3>
+                    <span id="partidasTotales" v-if="totalGamesPlayed != null"> <i class="fas fa-ship"></i> {{totalGamesPlayed}}</span>
+                </div>
+
+                <div class="graficoProgreso">
+
+                    <div class="container__progreso">
+                        <div class="container__numeros">
+                            <div v-if="wins != null && wins != '0 Victorias'">
+                                <i class="fas fa-plus-square winIcon"></i>
+                                <span id="porcentaje" class="winCount">{{winsPercent}}%</span>
+                            </div>
+
+                            <div v-if="ties != null && ties != '0 Empates'">
+                                <i class="fas fa-equals tieIcon"></i>
+                                <span id="porcentaje" class="tiesCount">{{tiesPercent}}%</span>
+                            </div>
+
+                            <div v-if="defeats != null && defeats != '0 Derrotas'">
+                                <i class="fas fa-minus-square defeatIcon"></i>
+                                <span id="porcentaje" class="defeatsCount">{{defeatsPercent}}%</span>
+                            </div>
+                        </div>
+
+                        <div class="progreso">
+                            <div class="wins"></div>
+                            <div class="ties"></div>
+                            <div class="defeats"></div>
+                        </div>
+                        <div class="container__numeros">
+                            <span id="victorias" class="winCount" v-if="wins != null && wins != '0 Victorias'">{{wins}}</span>
+                            <span id="empates" class="tiesCount" v-if="ties != null && ties != '0 Empates'">{{ties}}</span>
+                            <span id="derrotas" class="defeatsCount" v-if="defeats != null && defeats != '0 Derrotas'">{{defeats}}</span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
 

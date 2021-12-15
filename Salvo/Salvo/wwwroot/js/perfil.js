@@ -7,11 +7,19 @@ var app = new Vue({
         newPassword: "",
         newPasswordRepeat: "",
         avatar: "",
-        permisse: ""
+        permisse: "",
+        wins: "",
+        winsPercent: "",
+        defeats: "",
+        defeatsPercent: "",
+        ties: "",
+        tiesPercent: "",
+        totalGamesPlayed: ""
     },
     mounted() {
         this.GetPlayer();
         this.GetPermisses();
+        this.GetInfoPlayer();
     },
     methods: {
         changeName: function() {
@@ -140,6 +148,29 @@ var app = new Vue({
                     setTimeout(() => {
                         $('.close').click();
                     }, 200);
+                })
+                .catch(error => {
+                    console.log("Error, Código de status: " + error.response.status);
+                })
+        },
+        GetInfoPlayer: function() {
+            axios.get('/api/games/infoPlayer')
+                .then(result => {
+                    this.wins = result.data.wins + ' Victorias';
+                    this.winsPercent = Math.round((result.data.wins * 100) / result.data.totalGamesPlayed);
+                    this.defeats = result.data.defeats + ' Derrotas';
+                    this.defeatsPercent = Math.round((result.data.defeats * 100) / result.data.totalGamesPlayed);
+                    this.ties = result.data.ties + ' Empates';
+                    this.tiesPercent = Math.round((result.data.ties * 100) / result.data.totalGamesPlayed);
+                    this.totalGamesPlayed = result.data.totalGamesPlayed;
+
+                    $('.wins').width(this.winsPercent + '%');
+                    $('.ties').width(this.tiesPercent + '%');
+                    $('.defeats').width(this.defeatsPercent + '%');
+
+                    $('.winCount').width(this.winsPercent + '%');
+                    $('.tiesCount').width(this.tiesPercent + '%');
+                    $('.defeatsCount').width(this.defeatsPercent + '%');
                 })
                 .catch(error => {
                     console.log("Error, Código de status: " + error.response.status);

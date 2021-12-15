@@ -39,6 +39,18 @@ namespace Salvo.Repositories
                             .ToList();
         }
 
+        public IEnumerable<Game> GetGamesFromPlayer(long id)
+        {
+
+           return FindAll(source => source.Where(game => game.GamePlayers.FirstOrDefault(gamePlayer => gamePlayer.PlayerId == id) != null)
+                                           .Include(game => game.GamePlayers)
+                                               .ThenInclude(gameplayer => gameplayer.Player)
+                                                    .ThenInclude(player => player.Scores))
+                                           .ToList();
+        }
+
+
+
         public IEnumerable<Game> GetAllGamesWithPlayersAndSalvos()
         {
             return FindAll(source => source.Include(game => game.GamePlayers)

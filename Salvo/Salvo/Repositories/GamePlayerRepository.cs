@@ -70,6 +70,6 @@ namespace Salvo.Repositories
                     .FirstOrDefault();
         }
 
-        
+
     }
 }

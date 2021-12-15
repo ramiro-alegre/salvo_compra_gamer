@@ -64,19 +64,77 @@ h1 {
     gap: 20px;
 }
 
+.gamesPlayed>span {
+    font-size: 30px;
+}
 
-/*
-putImagen(uspId, files) {         
-    let url = environment.API_ENDPOINT + 'File';         
-    var model = new FormData();        
-     model.append("uspId", uspId);         
-     model.append("fileName", files);         
-     let httpHeaders = new HttpHeaders({             
-         'Content-Type': 'application/json',             
-         'Cache-Control': 'no-cache'         });         
-         httpHeaders.set('Access-Control-Allow-Origin', '');        
-          httpHeaders.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");         
-          httpHeaders.set("Access-Control-Allow-Headers", "");          
-          var options = {             fileKey: "fileName",             fileName: files,             chunkedMode: false,             mimeType: "multipart/form-data",             params: { 'fileName': files, 'uspId': uspId }         };          let data = this.httpClient.post(url, model, options);         return data;     }
+.graficoProgreso {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0px 100px 0px;
+}
 
-*/
+.container__progreso {
+    width: 500px;
+    height: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+}
+
+.progreso {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.wins {
+    background-color: green;
+    border-radius: 5px 0 0 5px;
+    height: 10px;
+}
+
+.ties {
+    background-color: grey;
+    height: 10px;
+}
+
+.defeats {
+    background-color: red;
+    border-radius: 0 5px 5px 0;
+    height: 10px;
+}
+
+.winCount {
+    color: green;
+}
+
+.defeatsCount {
+    text-align: end;
+    color: red;
+}
+
+.tiesCount {
+    text-align: center;
+    color: grey;
+}
+
+.container__numeros {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.winIcon {
+    color: green;
+}
+
+.tieIcon {
+    color: grey;
+}
+
+.defeatIcon {
+    color: red;
+}

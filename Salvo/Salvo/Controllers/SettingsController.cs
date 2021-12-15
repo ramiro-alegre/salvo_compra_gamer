@@ -28,9 +28,11 @@ namespace Salvo.Controllers
     {
 
         private IPlayerRepository _repository;
-        public SettingsController(IPlayerRepository repository)
+
+        public SettingsController(IPlayerRepository repository, IGameRepository gameRepository)
         {
             _repository = repository;
+
         }
 
         [HttpGet("permisse")]
@@ -292,5 +294,7 @@ namespace Salvo.Controllers
                 return StatusCode(403, ex.Message);
             }
         }
+
+
     }
 }

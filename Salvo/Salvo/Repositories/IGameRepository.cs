@@ -13,5 +13,6 @@ namespace Salvo.Repositories
         IEnumerable<Game> GetAllSalvoLocations();
         IEnumerable<Game> GetAllGamesWithPlayersAndSalvos();
         Game FindById(long id);
+        IEnumerable<Game> GetGamesFromPlayer(long id);
     }
 }

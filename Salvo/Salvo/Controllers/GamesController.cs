@@ -57,7 +57,7 @@ namespace Salvo.Controllers
                             Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
                         }).ToList()
                     }).ToList()
-            };
+                };
 
                 return Ok(gameList);
             } catch (Exception e)
@@ -99,7 +99,6 @@ namespace Salvo.Controllers
                 return StatusCode(403, ex.Message);
             }
         }
-
 
         [HttpGet("topLocations")]
         [AllowAnonymous]
@@ -197,11 +196,64 @@ namespace Salvo.Controllers
             }
         }
 
-        /*[HttpGet ("/estadistica", Name = "GetSunkedShips")]
-        [AllowAnonymous]
-        public IActionResult GetSunkedShips()
+        [HttpGet("infoPlayer")]
+        public IActionResult InfoPlayer()
         {
+            try
+            {
+                string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+                Player player = _playerRepository.FindByMail(email);
 
-        }*/
+
+
+                GameListDTO gameList = new GameListDTO
+                {
+                    Email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest",
+                    Avatar = User.FindFirst("Avatar") != null ? User.FindFirst("Avatar").Value : "Images/1.jpg",
+                    Games = _repository.GetGamesFromPlayer(player.Id)
+                    .Select(game => new GameDTO
+                    {
+                        Id = game.Id,
+                        CreationDate = game.CreationDate,
+                        GamePlayers = game.GamePlayers.Select(gp => new GamePlayerDTO
+                        {
+                            Id = gp.Id,
+                            JoinDate = gp.JoinDate,
+                            Player = new PlayerDTO
+                            {
+                                Id = gp.Player.Id,
+                                Name = (gp.Player.Name.Length > 10) ? gp.Player.Name.Substring(0, 10) + "..." : gp.Player.Name,
+                                Email = gp.Player.Email,
+                                Avatar = gp.Player.Avatar
+                            },
+                            Point = gp.GetScore() != null ? (double?)gp.GetScore().Point : null
+                        }).ToList()
+                    }).ToList()
+                };
+
+                var gamesWins = gameList.Games.Where(game => game.GamePlayers.FirstOrDefault(gp => gp.Player.Id == player.Id).Point == 1).ToList().Count;
+
+                var gamesLoss = gameList.Games.Where(game => game.GamePlayers.FirstOrDefault(gp => gp.Player.Id == player.Id).Point == 0).ToList().Count;
+
+                var gamesTies = gameList.Games.Where(game => game.GamePlayers.FirstOrDefault(gp => gp.Player.Id == player.Id).Point == 0.5).ToList().Count;
+
+                var gamesNotFinished = gameList.Games.Where(game => game.GamePlayers.FirstOrDefault(gp => gp.Player.Id == player.Id).Point == null).ToList().Count;
+
+                ResultsDTO resultado = new ResultsDTO
+                {
+                    Wins = gamesWins,
+                    Defeats = gamesLoss,
+                    Ties = gamesTies,
+                    TotalGamesPlayed = gameList.Games.Count
+                };
+
+                return StatusCode(201, resultado);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
