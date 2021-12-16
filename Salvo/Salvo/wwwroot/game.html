@@ -35,7 +35,12 @@
                     <span v-if="opponent.email != null"> vs {{ opponent.email }}</span>
                 </div>
             </a>
+
             <div>
+                <button id="btnReproducir" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">
+                    <img id="dalePlay" src="img/mute.png" width="30" height="30"></img>
+                </button>
+
                 <a id="user-name" v-if="player != 'Guest'" data-toggle="modal" v-on:click="moveToPerfil" id="botonPerfil">
 
                     <template>
@@ -48,6 +53,8 @@
                 </a>
 
                 <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
+
+                <audio src="music/Battleship.mp3" preload="auto" controls="none" style="display:none"></audio>
             </div>
 
         </nav>
@@ -325,6 +332,7 @@
     <!--/Agregado-->
 
     <script src="js/gameView.js"></script>
+    <script src="js/musiquita.js"></script>
 </body>
 
 </html>

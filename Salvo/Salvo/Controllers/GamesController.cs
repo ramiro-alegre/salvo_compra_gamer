@@ -244,7 +244,7 @@ namespace Salvo.Controllers
                     Wins = gamesWins,
                     Defeats = gamesLoss,
                     Ties = gamesTies,
-                    TotalGamesPlayed = gameList.Games.Count
+                    TotalGamesPlayed = gameList.Games.Count - gamesNotFinished
                 };
 
                 return StatusCode(201, resultado);
