@@ -222,3 +222,7 @@ table tbody {
 .circle-perfil {
     object-fit: cover;
 }
+
+.modal-body {
+    color: black;
+}
