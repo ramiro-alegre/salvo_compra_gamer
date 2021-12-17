@@ -138,3 +138,23 @@ h1 {
 .defeatIcon {
     color: red;
 }
+
+.message {
+    color: black;
+    border: 1px solid black;
+    padding: 5px 10px;
+    margin: 10px 0px;
+    display: block;
+}
+
+.messageError {
+    color: red;
+    border: 1px solid red;
+    padding: 5px 10px;
+    margin: 10px 0px;
+    display: block;
+}
+
+.messageNone {
+    display: none;
+}

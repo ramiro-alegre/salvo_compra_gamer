@@ -108,6 +108,12 @@ namespace Salvo.Controllers
 
             bool hasValidFormat = true;
 
+            if(Email == null || Email == "")
+            {
+                hasValidFormat = false;
+                return hasValidFormat;
+            }
+
             try
             {
                 MailAddress address = new MailAddress(Email);

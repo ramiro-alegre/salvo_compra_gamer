@@ -80,14 +80,27 @@ var app = new Vue({
                 .then(result => {
                     this.name = result.data.name;
                     password = "";
-                    $('#message').text("Modificado");
+                    const message = $('.messageNone');
+                    message.text("Modificado");
+                    message.removeClass('messageNone');
+                    message.addClass('message');
+
                     setTimeout(() => {
-                        $('.close').click();
-                    }, 200);
+                        message.removeClass('message');
+                        message.addClass('messageNone');
+                    }, 3000);
 
                 })
                 .catch(error => {
-                    console.log("Error, Código de status: " + error.response.status);
+                    const message = $('.messageNone');
+                    message.text(error.response.data);
+                    message.removeClass('messageNone');
+                    message.addClass('messageError');
+
+                    setTimeout(() => {
+                        message.removeClass('messageError');
+                        message.addClass('messageNone');
+                    }, 3000);
                 })
         },
 
@@ -99,13 +112,26 @@ var app = new Vue({
                 .then(result => {
                     this.mail = result.data.email;
                     password = "";
-                    $('#message').text("Modificado");
+                    const message = $('.messageNone');
+                    message.text("Modificado");
+                    message.removeClass('messageNone');
+                    message.addClass('message');
+
                     setTimeout(() => {
-                        $('.close').click();
-                    }, 200);
+                        message.removeClass('message');
+                        message.addClass('messageNone');
+                    }, 3000);
                 })
                 .catch(error => {
-                    console.log("Error, Código de status: " + error.response.status);
+                    const message = $('.messageNone');
+                    message.text(error.response.data);
+                    message.removeClass('messageNone');
+                    message.addClass('messageError');
+
+                    setTimeout(() => {
+                        message.removeClass('messageError');
+                        message.addClass('messageNone');
+                    }, 3000);
                 })
         },
         ChangePassword: function() {
@@ -118,13 +144,26 @@ var app = new Vue({
                     password = "";
                     newPassword = "";
                     newPasswordRepeat = "";
-                    $('#message').text("Modificado");
+                    const message = $('.messageNone');
+                    message.text("Modificado");
+                    message.removeClass('messageNone');
+                    message.addClass('message');
+
                     setTimeout(() => {
-                        $('.close').click();
-                    }, 200);
+                        message.removeClass('message');
+                        message.addClass('messageNone');
+                    }, 3000);
                 })
                 .catch(error => {
-                    console.log("Error, Código de status: " + error.response.status);
+                    const message = $('.messageNone');
+                    message.text(error.response.data);
+                    message.removeClass('messageNone');
+                    message.addClass('messageError');
+
+                    setTimeout(() => {
+                        message.removeClass('messageError');
+                        message.addClass('messageNone');
+                    }, 3000);
                 })
         },
         GetPermisses: function() {

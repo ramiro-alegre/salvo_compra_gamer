@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
-
+    <link rel="shortcut icon" href="/img/favicon.png">
     <!--/Agregado-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -126,17 +126,17 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="login-form" class="my-2 my-lg-0 centerForm">
+                        <form id="login-form" class="my-2 my-lg-0 text-center flex-column align-center">
                             <input v-model:value="name" class="form-control mr-sm-2 formInput" type="text" placeholder="Nuevo Nombre" aria-label="Name" id="inputPerfilName">
                             <input v-model:value="email" class="form-control mr-sm-2 formInput" type="email" placeholder="Email" aria-label="Email" id="inputPerfilEmail">
                             <input v-model:value="password" class="form-control mr-sm-2 formInput" type="password" placeholder="Contrase&ntilde;a actual" aria-label="Contraseña" id="inputPerfilPassword">
 
                             <input v-model:value="newPassword" class="form-control mr-sm-2 formInput" type="password" placeholder="Nueva Contrase&ntilde;a" aria-label="Nueva Contraseña" id="inputNewPassword">
                             <input v-model:value="newPasswordRepeat" class="form-control mr-sm-2 formInput" type="password" placeholder="Repetir Nueva Contrase&ntilde;a" aria-label="Repetir Nueva Contraseña" id="inputNewPassword2">
+                            <span class="messageNone"></span>
                             <button id="changeName-btn" v-on:click="ChangeName" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Guardar</button>
                             <button id="changeMail-btn" v-on:click="ChangeMail" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Guardar</button>
                             <button id="changePassword-btn" v-on:click="ChangePassword" class="btn btn-outline-primary ml-1 mr-1 my-2 my-sm-0" type="button">Guardar</button>
-                            <span id="message"></span>
                         </form>
                     </div>
 

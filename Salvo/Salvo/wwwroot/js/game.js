@@ -154,16 +154,16 @@
                     }
                 })
                 .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
-                    if (error.response.status == 401) {
-                        this.modal.tittle = "Falló la autenticación";
-                        this.modal.message = "Email o contraseña inválido"
-                        this.showModal(true);
-                    } else {
-                        this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
-                        this.modal.message = "Ha ocurrido un error";
-                        this.showModal(true);
-                    }
+
+                    const message = $('.messageNone');
+                    message.text("Email o contraseña invalidos");
+                    message.removeClass('messageNone');
+                    message.addClass('messageError');
+
+                    setTimeout(() => {
+                        message.removeClass('messageError');
+                        message.addClass('messageNone');
+                    }, 6000);
                 });
         },
         signin: function(event) {
@@ -178,16 +178,20 @@
                     }
                 })
                 .catch(error => {
-                    console.log("error, código de estatus: " + error.response.status);
-                    if (error.response.status == 403) {
-                        this.modal.tittle = "Falló el registro";
-                        this.modal.message = error.response.data
-                        this.showModal(true);
+                    const message = $('.messageNone');
+                    let messageFront = VerifyForm(this.name, this.email, this.password);
+                    if (messageFront === "Ok") {
+                        message.text(error.response.data);
                     } else {
-                        this.modal.tittle = "Fall&Oacute;la autenticaci&oacute;n";
-                        this.modal.message = "Ha ocurrido un error";
-                        this.showModal(true);
+                        message.text(messageFront);
                     }
+                    message.removeClass('messageNone');
+                    message.addClass('messageError');
+
+                    setTimeout(() => {
+                        message.removeClass('messageError');
+                        message.addClass('messageNone');
+                    }, 6000);
                 });
         },
         getScores: function(games) {
@@ -230,7 +234,7 @@
         },
         getImgUrl(image) {
             return `../images/${image}.png`
-        }
+        },
 
     },
     filters: {
@@ -255,3 +259,16 @@
         this.getGames();
     }
 })
+
+VerifyForm = (name = "", mail = "", password = "") => {
+    if (name === "") {
+        return "Debe ingresar un nombre";
+    }
+    if (mail === "") {
+        return "Debe ingresar un email";
+    }
+    if (password === "") {
+        return "Debe ingresar una contraseña";
+    }
+    return "Ok";
+};

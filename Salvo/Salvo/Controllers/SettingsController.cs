@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -68,7 +69,7 @@ namespace Salvo.Controllers
 
                 if (dbPlayer == null)
                 {
-                    return StatusCode(403, "Ocurrio un error");
+                    return StatusCode(403, "Usuario no registrado");
                 }
 
                 PlayerDTO player = new PlayerDTO
@@ -94,36 +95,67 @@ namespace Salvo.Controllers
         {
             try
             {
+                string MensajeError = "";
+                bool CamposInvalidos = false;
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
 
                 if (email == "Guest")
-                    return StatusCode(403, "Ocurrio un error");
+                {
+                    CamposInvalidos = true;
+                    MensajeError = "Usuario no registrado";
+                }
+
+                if (string.IsNullOrEmpty(player.Name))
+                {
+                    CamposInvalidos = true;
+                    MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Name cannot be Empty" : MensajeError + " - The Name cannot be Empty";
+                }
+                if (!isValidName(player.Name))
+                {
+                    CamposInvalidos = true;
+                    MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Name is not valid" : MensajeError + " - The Name is not valid";
+                }
 
                 Player dbPlayer = _repository.FindByMail(email);
 
                 if (dbPlayer == null)
-                    return StatusCode(403, "Ocurrio un error");
+                {
+                    CamposInvalidos = true;
+                    MensajeError = "Email no registrado";
+                }
+
 
                 byte[] data = Encoding.ASCII.GetBytes(player.Password);
                 data = new SHA256Managed().ComputeHash(data);
                 string passwordHash = Encoding.ASCII.GetString(data);
 
-                if (dbPlayer.Password != passwordHash)
-                    return StatusCode(403, "Contraseña Incorrecta");
-
-
-                Player newPlayer = new Player
+                if (passwordHash != dbPlayer.Password)
                 {
-                    Id = dbPlayer.Id,
-                    Name = player.Name,
-                    Email = email,
-                    Password = dbPlayer.Password,
-                    Avatar = dbPlayer.Avatar
-                };
+                    CamposInvalidos = true;
+                    MensajeError = "Contraseña incorrecta";
+                }
 
-                _repository.Save(newPlayer);
+                if (!CamposInvalidos)
+                {
 
-                return StatusCode(201, newPlayer);
+                       Player newPlayer = new Player 
+                        {
+                            Id = dbPlayer.Id,
+                            Name = player.Name,
+                            Email = email,
+                            Password = dbPlayer.Password,
+                            Avatar = dbPlayer.Avatar
+                        };
+
+                        _repository.Save(newPlayer);
+
+                        return StatusCode(201, newPlayer);
+                }
+                else
+                {
+                    return StatusCode(403, MensajeError);
+                }
+
             }
             catch (Exception ex)
             {
@@ -136,59 +168,77 @@ namespace Salvo.Controllers
         {
             try
             {
-                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(player.Email);
-            
-                string mensaje = !match.Success ? "Email invalido" : String.IsNullOrEmpty(player.Email) || String.IsNullOrEmpty(player.Password) ? "Datos invalidos" : "";
-
-                if (mensaje != "")
-                    return StatusCode(403, mensaje);
-
+                string MensajeError = "";
+                bool CamposInvalidos = false;
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
 
-                if (email == "Guest")
-                    return StatusCode(403, "Ocurrio un error");
+                if (string.IsNullOrEmpty(player.Email))
+                {
+                    CamposInvalidos = true;
+                    MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Email cannot be Empty" : MensajeError + " - The Email cannot be Empty";
+                }
+                if (!isValidEmail(player.Email))
+                {
+                    CamposInvalidos = true;
+                    MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Email is not valid" : MensajeError + " - The Email is not valid";
+                }
 
                 Player dbPlayer = _repository.FindByMail(email);
 
                 if (dbPlayer == null)
-                    return StatusCode(403, "Ocurrio un error");
+                {
+                    CamposInvalidos = true;
+                    MensajeError = "Email no registrado";
+                }
+                    
 
                 byte[] data = Encoding.ASCII.GetBytes(player.Password);
                 data = new SHA256Managed().ComputeHash(data);
                 string passwordHash = Encoding.ASCII.GetString(data);
 
-                if (dbPlayer.Password != passwordHash)
-                    return StatusCode(403, "Contraseña Incorrecta");
-
-
-                Player newPlayer = new Player
+                if (passwordHash != dbPlayer.Password)
                 {
-                    Id = dbPlayer.Id,
-                    Name = dbPlayer.Name,
-                    Email = player.Email,
-                    Password = dbPlayer.Password,
-                    Avatar = dbPlayer.Avatar
-                };
+                    CamposInvalidos = true;
+                    MensajeError = "Contraseña incorrecta";
+                }
+        
 
-                var claims = new List<Claim>
-                {
+                if (!CamposInvalidos)
+                {               
+                   Player newPlayer = new Player
+                   {
+                         Id = dbPlayer.Id,
+                         Name = dbPlayer.Name,
+                         Email = player.Email,
+                         Password = dbPlayer.Password,
+                         Avatar = dbPlayer.Avatar
+                    };
+
+
+                    var claims = new List<Claim>
+                    {
                     new Claim("Player", newPlayer.Email),
                     new Claim("Avatar", dbPlayer.Avatar)
-                };
+                    };
 
-                var claimsIdentity = new ClaimsIdentity(
-                    claims, CookieAuthenticationDefaults.AuthenticationScheme
-                );
+                    var claimsIdentity = new ClaimsIdentity(
+                        claims, CookieAuthenticationDefaults.AuthenticationScheme
+                    );
 
-                await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity)
-                );
+                    await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity)
+                    );
 
-                _repository.Save(newPlayer);
+                    _repository.Save(newPlayer);
 
-                return StatusCode(201, newPlayer);
+                    return StatusCode(201, newPlayer);
+
+                }
+                else
+                {
+                    return StatusCode(403, MensajeError);
+                }
             }
             catch (Exception ex)
             {
@@ -202,44 +252,77 @@ namespace Salvo.Controllers
             try
             {
                 string email = User.FindFirst("Player") != null ? User.FindFirst("Player").Value : "Guest";
+                string MensajeError = "", mensajeErrorPassword = "";
+                bool CamposInvalidos = false;
+                if (string.IsNullOrEmpty(player.Password))
+                {
+                    CamposInvalidos = true;
+                    MensajeError = (string.IsNullOrEmpty(MensajeError)) ? "The Password cannot be Empty" : MensajeError + " - The Password cannot be Empty";
+                }
+
+                if (player.NewPassword != player.NewPasswordRepeat)
+                {
+                    CamposInvalidos = true;
+                    MensajeError = "La contraseña nueva debe coincidir";
+                }
+
+                if (!IsValidPassword(player.NewPassword, out mensajeErrorPassword))
+                {
+                    CamposInvalidos = true;
+                    MensajeError = (string.IsNullOrEmpty(MensajeError)) ? mensajeErrorPassword : MensajeError + " - " + mensajeErrorPassword;
+                }
 
                 if (email == "Guest")
-                    return StatusCode(403, "Ocurrio un error");
+                {
+                    CamposInvalidos = true;
+                    MensajeError = "Usuario no registrado";
+                }
+
 
                 Player dbPlayer = _repository.FindByMail(email);
 
                 if (dbPlayer == null)
-                    return StatusCode(403, "Ocurrio un error");
+                {
+                    CamposInvalidos = true;
+                    MensajeError = "Usuario actual no encontrado";
+                }
+
 
                 byte[] data = Encoding.ASCII.GetBytes(player.Password);
                 data = new SHA256Managed().ComputeHash(data);
                 string passwordHash = Encoding.ASCII.GetString(data);
 
                 if (dbPlayer.Password != passwordHash)
-                    return StatusCode(403, "Contraseña Incorrecta");
-
-                if (player.NewPassword != player.NewPasswordRepeat)
-                    return StatusCode(403, "Las contraseñas no coinciden");
-
-                byte[] data2 = Encoding.ASCII.GetBytes(player.NewPassword);
-                data2 = new SHA256Managed().ComputeHash(data2);
-                string newpasswordHash = Encoding.ASCII.GetString(data2);
-
-
-
-                Player newPlayer = new Player
                 {
-                    Id = dbPlayer.Id,
-                    Name = dbPlayer.Name,
-                    Email = email,
-                    Password = newpasswordHash,
-                    Avatar = dbPlayer.Avatar
-                };
+                    CamposInvalidos = true;
+                    MensajeError = "Contraseña incorrecta";
+                }
 
-                _repository.Save(newPlayer);
+                if (!CamposInvalidos)
+                {
+                    //Hash de la nueva password
+                    byte[] data2 = Encoding.ASCII.GetBytes(player.NewPassword);
+                    data2 = new SHA256Managed().ComputeHash(data2);
+                    string newpasswordHash = Encoding.ASCII.GetString(data2);
 
-                return StatusCode(201, newPlayer);
+                    Player newPlayer = new Player
+                    {
+                        Id = dbPlayer.Id,
+                        Name = dbPlayer.Name,
+                        Email = email,
+                        Password = newpasswordHash,
+                        Avatar = dbPlayer.Avatar
+                    };
 
+                    _repository.Save(newPlayer);
+
+                    return StatusCode(201, newPlayer);
+                }
+                else
+                {
+                    return StatusCode(403, MensajeError);
+                }
+              
             }catch(Exception ex)
             {
                 return StatusCode(403, ex.Message);
@@ -295,6 +378,73 @@ namespace Salvo.Controllers
             }
         }
 
+        public bool isValidName(string Name)
+        {
+            var hasBetween3And30Chars = new Regex(@".{3,30}");
 
+            return hasBetween3And30Chars.IsMatch(Name);
+        }
+        public bool isValidEmail(string Email)
+        {
+            var hasBetween10And30Chars = new Regex(@".{10,30}");
+
+            bool hasValidFormat = true;
+
+            try
+            {
+                MailAddress address = new MailAddress(Email);
+                hasValidFormat = (address.Address == Email);
+                // or
+                // isValid = string.IsNullOrEmpty(address.DisplayName);
+            }
+            catch (FormatException)
+            {
+                hasValidFormat = false;
+            }
+
+            return hasValidFormat && hasBetween10And30Chars.IsMatch(Email);
+        }
+        public bool IsValidPassword(string password, out string ErrorMessage)
+        {
+            var minLength = 8;
+            var numUpper = 1;
+            var numLower = 1;
+            var numNumbers = 1;
+            var numSpecial = 1;
+
+            var upper = new Regex("[A-Z]");
+            var lower = new Regex("[a-z]");
+            var number = new Regex("[0-9]");
+            var special = new Regex("[^a-zA-Z0-9]");
+
+            if (password.Length < minLength)
+            {
+                ErrorMessage = "Password should not be less than or greater than 8 characters";
+                return false;
+            }
+            if (upper.Matches(password).Count < numUpper)
+            {
+                ErrorMessage = "Password should contain at least one upper case letter";
+                return false;
+            }
+            if (lower.Matches(password).Count < numLower)
+            {
+                ErrorMessage = "Password should contain at least one lower case letter";
+                return false;
+            }
+            if (number.Matches(password).Count < numNumbers)
+            {
+                ErrorMessage = "Password should contain At least one numeric value";
+                return false;
+            }
+            if (special.Matches(password).Count < numSpecial)
+            {
+                ErrorMessage = "Password should contain at least one special case character";
+                return false;
+            }
+
+            ErrorMessage = string.Empty;
+            return true;
+        }
     }
 }
