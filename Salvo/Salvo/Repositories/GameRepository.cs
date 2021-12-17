@@ -35,8 +35,8 @@ namespace Salvo.Repositories
                     .ThenInclude(gp => gp.Player)
                     .ThenInclude(player => player.Scores)
                           )
-                            .OrderBy(game => game.CreationDate)
-                            .ToList();
+                    .OrderByDescending(game => game.CreationDate)
+                    .ToList();
         }
 
         public IEnumerable<Game> GetGamesFromPlayer(long id)

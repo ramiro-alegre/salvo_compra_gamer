@@ -227,7 +227,7 @@ function placeShips(ships) {
 }
 
 function placeSalvos(salvos, playerId, ships) {
-    $('.hitSelf').remove();
+    $('td').removeClass('shoot');
     salvos = JSON.parse(JSON.stringify(salvos));
     const shitPositions = [];
     ships.forEach(ship => ship.locations.forEach(location => { shitPositions.push(location.location) }))
