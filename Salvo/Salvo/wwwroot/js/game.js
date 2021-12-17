@@ -163,7 +163,7 @@
                     setTimeout(() => {
                         message.removeClass('messageError');
                         message.addClass('messageNone');
-                    }, 6000);
+                    }, 4000);
                 });
         },
         signin: function(event) {
@@ -191,7 +191,7 @@
                     setTimeout(() => {
                         message.removeClass('messageError');
                         message.addClass('messageNone');
-                    }, 6000);
+                    }, 4000);
                 });
         },
         getScores: function(games) {
