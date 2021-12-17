@@ -78,16 +78,14 @@ namespace Salvo.Models
             var sunksOpponent = opponent?.GetSunks().Count;
             //No tengo oponente
             if (opponent == null)
-            {
                 return GameState.PLACE_SHIPS;
-            }
 
             //No posicione los barcos, por lo tanto, tengo que hacerlo
             if (ships == 0)
-            {
-              return  GameState.PLACE_SHIPS;
-            }
-
+                return GameState.PLACE_SHIPS;
+            //Mí oponente no posiciono los barcos, por lo tanto, tengo que esperar
+            if (shipsOpponent == 0)
+                return GameState.WAIT;
 
             //Yo tengo más salvos, por lo tanto, tengo que esperar
             if (salvos > salvosOpponent)
@@ -123,6 +121,7 @@ namespace Salvo.Models
                     return GameState.WAIT;
                 }
             }
+
         }
 
     }
