@@ -230,11 +230,27 @@
                     }
                 })
             })
-            app.scores = scores;
+
+            scores.sort(function(a, b) {
+                // a and b will here be two objects from the array 
+                // thus a[1] and b[1] will equal the names 
+                // if they are equal, return 0 (no sorting) 
+                if (a['total'] == b['total']) { return 0; }
+                if (a['total'] > b['total']) {
+                    // if a should come after b, return 1 
+                    return -1;
+                } else { // if b should come after a, return -1 
+                    return 1;
+                }
+            });
+            console.log("Score despues de cortar");
+
+            app.scores = scores.slice(0, 5);
         },
         getImgUrl(image) {
             return `../images/${image}.png`
         },
+
 
     },
     filters: {
@@ -253,7 +269,8 @@
         },
         totalRows() {
             return this.games.length
-        }
+        },
+
     },
     created() {
         this.getGames();
