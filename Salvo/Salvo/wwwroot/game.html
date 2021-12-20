@@ -37,8 +37,16 @@
                     <span v-if="opponent.email != null"> vs {{ opponent.email }}</span>
                 </div>
             </a>
+            
 
             <div>
+                <button id="btnBajarVol" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">
+                    <img id="bajarVol" src="img/bajarVol.png" width="15" height="15"></img>
+                </button>
+
+                <button id="btnSubirVol" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">
+                    <img id="subirVol" src="img/subirVol.png" width="15" height="15"></img>
+                </button>
                 <button id="btnReproducir" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">
                     <img id="dalePlay" src="img/mute.png" width="30" height="30"></img>
                 </button>
@@ -46,12 +54,12 @@
                 <a id="user-name" v-if="player != 'Guest'" data-toggle="modal" v-on:click="moveToPerfil" id="botonPerfil">
 
                     <template>
-    
-                          <v-avatar>
+
+                        <v-avatar>
                             <img class="circle-perfil" v-bind:src="'images/' +  player.avatar" alt="image Perfil">
-                          </v-avatar>
-                
-                   </template>
+                        </v-avatar>
+
+                    </template>
                 </a>
 
                 <button v-on:click="logout" id="logout-btn" class="btn btn-outline-secondary ml-1 my-2 my-sm-0" type="button">Logout</button>
