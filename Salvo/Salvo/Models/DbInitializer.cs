@@ -10,7 +10,7 @@ namespace Salvo.Models
         public static void Initialize(SalvoContext context ) 
         {
            
-            if (!context.Players.Any())
+         /*   if (!context.Players.Any())
             {
 
                 var Players = new Player[]
@@ -27,7 +27,7 @@ namespace Salvo.Models
                      context.SaveChanges();
 
             }
-
+         */
            /* 
              
             if (!context.Games.Any())

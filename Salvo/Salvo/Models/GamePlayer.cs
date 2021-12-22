@@ -66,62 +66,37 @@ namespace Salvo.Models
 
         public GameState GetGameState()
         {
-            var opponent = GetOpponent();
+            GameState gameState = GameState.WAIT;
 
-            var ships = Ships.Count;
-            var shipsOpponent = opponent?.Ships.Count;
+            GamePlayer Opponent = GetOpponent();
 
-            var salvos = Salvos.Count;
-            var salvosOpponent = opponent?.Salvos.Count;
-
-            var sunks = GetSunks().Count;
-            var sunksOpponent = opponent?.GetSunks().Count;
-            //No tengo oponente
-            if (opponent == null)
+            if (Ships.Count == 0)
                 return GameState.PLACE_SHIPS;
-
-            //No posicione los barcos, por lo tanto, tengo que hacerlo
-            if (ships == 0)
-                return GameState.PLACE_SHIPS;
-            //Mí oponente no posiciono los barcos, por lo tanto, tengo que esperar
-            if (shipsOpponent == 0)
+            if (Opponent == null)
                 return GameState.WAIT;
-
-            //Yo tengo más salvos, por lo tanto, tengo que esperar
-            if (salvos > salvosOpponent)
-            {
+            if (Opponent.Ships.Count == 0)
                 return GameState.WAIT;
-            }
-            //Mí oponente tiene más salvos, por lo tanto, tengo que disparar
-            else if(salvos < salvosOpponent)
-            {
+            if (Salvos.Count > Opponent.Salvos.Count)
+                return GameState.WAIT;
+            if (Salvos.Count < Opponent.Salvos.Count)
                 return GameState.ENTER_SALVO;
-            }
-            //Los 2 tenemos los mismos salvos
-            else 
+            if (Salvos.Count == Opponent.Salvos.Count)
             {
-                if(ships == sunks && shipsOpponent == sunksOpponent)
-                {
+                var Sunks = GetSunks();
+                var OpponentSunks = Opponent?.GetSunks();
+                if (Sunks.Count == Ships.Count && OpponentSunks.Count == Opponent.Ships.Count)
                     return GameState.TIE;
-                }
-                else if(sunks == ships)
-                {
+                else if (Sunks.Count == Ships.Count)
                     return GameState.LOSS;
-                }
-                else if(shipsOpponent == sunksOpponent)
-                {
+                else if (OpponentSunks.Count == Opponent.Ships.Count)
                     return GameState.WIN;
-                }
-                else if(JoinDate < opponent.JoinDate)
-                {
+                else if (JoinDate < Opponent.JoinDate)
                     return GameState.ENTER_SALVO;
-                }
                 else
-                {
                     return GameState.WAIT;
-                }
             }
 
+            return gameState;
         }
 
     }

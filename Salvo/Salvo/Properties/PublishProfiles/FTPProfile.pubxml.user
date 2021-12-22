@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Este archivo se usa en el proceso de publicación y empaquetado del proyecto web. Para personalizar el comportamiento de este proceso,
+edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 para obtener más información. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword />
+    <_PublishTargetUrl>ftp://compragamer-001-site1/http://compragamer-001-site1.itempurl.com/</_PublishTargetUrl>
+    <History>True|2021-12-22T20:01:32.7058509Z;False|2021-12-22T17:00:14.1904873-03:00;True|2021-12-21T18:35:52.8241650-03:00;False|2021-12-21T18:34:38.6286819-03:00;False|2021-12-21T18:32:28.1137977-03:00;False|2021-12-21T18:31:16.1485169-03:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="SalvoDataBase">
+      <Value>Data Source=SQL5108.site4now.net%3bInitial Catalog=db_a7e1f6_salvodb%3bUser Id=db_a7e1f6_salvodb_admin%3bPassword=Ramiro123%40</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
